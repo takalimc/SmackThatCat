@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {weekWindow,boardResponse,publishEntry,countTaps} from '../lib/leaderboard.mjs';
+const before=Date.parse('2026-11-22T15:59:59.999Z'); // Sunday 23:59 MYT
+const after=before+1;
+assert.equal(weekWindow(before).key,'2026-11-16');
+assert.equal(weekWindow(after).key,'2026-11-23');
+assert.equal(weekWindow(after).start,after);
+const empty={leaders:[],recent:[]};
+let board=empty;
+const add=(score,now,id)=>{board=publishEntry(board,{id,started:now},{score,friends:6,bossHits:2},now,'Player '+id);};
+for(let i=0;i<10;i++)add(100+i,before-7*86400000,'old'+i);
+add(7,before,'weekly');
+let response=boardResponse(board,before);
+assert.equal(response.ranks.length,10);
+assert.equal(response.ranks.some(e=>e.id==='weekly'),false);
+assert.equal(response.weeklyRanks[0].score,7);
+assert.equal(response.weeklyRanks[0].id,'weekly');
+assert.equal(boardResponse(board,after).weeklyRanks.length,0);
+add(3,after,'new');
+response=boardResponse(board,after);
+assert.equal(response.weeklyRanks.length,1);
+assert.equal(response.weeklyRanks[0].score,3);
+assert.equal(response.ranks[0].score,109);
+assert.equal(response.weekEnds,'2026-11-29T16:00:00.000Z');
+assert.equal(publishEntry(board,{id:'new',started:after},{score:3,friends:6,bossHits:2},after+10,'Again'),board);
+// Existing scores seed the initial weekly board without deleting or recalculating them.
+const legacy={leaders:[{id:'keep',score:35,friends:6,player:'Existing',posted:before,bossHits:26}],recent:[]};
+assert.equal(boardResponse(legacy,before).weeklyRanks[0].score,35);
+assert.equal(boardResponse(legacy,after).ranks[0].score,35);
+const taps={tabby:[0,100],boss:[0],paw:[500,1000,1500,2000,2500,3000]};
+assert.equal(countTaps(taps,'roundup-clock-v1',[0,1,2,3,4,5]).score,10);
+assert.equal(countTaps(taps,'roundup-clock-v1',[0,1,2,3,4,5]).roundupPoints,7);
+console.log('PASS: Malaysia weekly boundary/reset, weekly scores below all-time top ten retained, all-time history preserved, legacy migration, duplicate retries, unchanged server scoring');

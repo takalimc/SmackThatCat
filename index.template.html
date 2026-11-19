@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.19</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.20</title><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#261522;font-family:system-ui,-apple-system,sans-serif;color:white}button{cursor:pointer;font:inherit;touch-action:manipulation}#app{position:relative;max-width:650px;height:100dvh;margin:auto;overflow:hidden;background:radial-gradient(circle,#fff5da,#f7bcb3)}.hidden{display:none!important}#home,#game,#cinema,#end,#help,#paused{position:absolute;inset:0}#home{background:#35221e}#poster{width:100%;height:100%;object-fit:cover}#home:after{content:"";position:absolute;inset:65% 0 0;background:linear-gradient(transparent,#24111ad9);pointer-events:none}#menu{position:absolute;bottom:max(5%,env(safe-area-inset-bottom));left:0;right:0;z-index:2;display:grid;justify-items:center;gap:12px}.primary{border:4px solid #fff3d8;border-radius:50px;background:linear-gradient(#ff7286,#e72452);color:white;font-size:27px;font-weight:1000;padding:12px 58px;box-shadow:0 6px #92203c}.secondary{border:2px solid #a34a5a;border-radius:40px;background:#fff3dd;color:#692d43;font-weight:800;padding:10px 25px}#hud{position:absolute;z-index:5;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:5px}.pill{min-width:73px;text-align:center;border-radius:13px;border:2px solid #ffdb95;background:#6b3041;padding:5px 8px;font-size:11px;font-weight:900}.pill strong{display:block;font-size:25px;color:#ffe57a}#tools{display:flex;gap:5px}#tools button{border:2px solid #fff6;border-radius:10px;background:#fff3df;color:#763145;height:43px;min-width:39px}#phase{position:absolute;top:85px;left:6px;right:6px;text-align:center;color:#922b50;font-size:clamp(18px,5vw,26px);font-weight:1000}#arena{position:absolute;inset:145px 8px 105px;overflow:hidden;touch-action:none}#target{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(120px,39vw,240px);height:clamp(120px,39vw,240px);border:0;background:none;padding:0;touch-action:none;transition:left .13s ease-out,top .13s ease-out}#target img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}#target.boss{width:min(65%,260px);height:min(80%,380px)}#target.hit img{animation:boop .16s ease}@keyframes boop{50%{transform:scale(.89) rotate(-5deg)}}#bubble{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(17px,4.2vw,23px);color:#e92859;font-weight:1000;text-shadow:1px 2px white;pointer-events:none}#progress{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:4px;right:4px;text-align:center;color:#782c43;font-weight:900;font-size:13px}#slots{display:flex;justify-content:center;gap:5px;margin-top:7px}.slot{width:clamp(37px,11vw,54px);height:clamp(37px,11vw,54px);border:2px solid #ce8793;border-radius:10px;background:#fff9}.slot img{width:100%;height:100%;object-fit:contain}#cinema{z-index:12;background:#21151e;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}#cinema img{width:100%;height:calc(100% - 96px);min-height:0;object-fit:contain;flex:1}#cinemaLabel{position:relative;flex:none;min-height:90px;padding:12px 16px;display:grid;place-items:center;text-align:center;font-weight:1000;font-size:clamp(18px,4.8vw,29px);line-height:1.12;color:#ffe46c;text-shadow:2px 3px #842441;background:#21151e}#end,#help,#paused{z-index:20;background:#271524e9;display:grid;place-items:center;padding:18px}.panel{background:#fff1d9;border:4px solid #f6bb61;border-radius:23px;color:#702d43;padding:23px;max-width:440px;width:100%;text-align:center}.panel h1{margin:0 0 10px}#finalScore{font-size:58px;font-weight:1000;color:#e83259}#notice{position:absolute;z-index:8;top:23%;left:10%;right:10%;text-align:center;font-weight:1000;font-size:clamp(22px,5vw,32px);color:#ef3b64;text-shadow:2px 2px white;pointer-events:none}#notice.bossNotice{top:112px;font-size:19px}#toast{font-size:14px;min-height:20px}@media(max-height:620px){#arena{inset:125px 8px 75px}#phase{top:75px}#target.boss{height:75%}#progress{font-size:11px}}@media(min-aspect-ratio:1/1){#poster{object-fit:contain}#arena{inset:120px 8px 65px}#target{width:clamp(110px,28vh,230px);height:clamp(110px,28vh,230px)}#target.boss{height:85%}}
 
 /* Use the game’s own hit feedback and keep touch gestures out of the arena. */
@@ -106,15 +106,45 @@
 #roundupPack { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:14px 0; }
 #roundupPack img { width:clamp(40px,11vw,55px); height:55px; object-fit:contain; }
 .slot.collected { background:#ffe49b; border-color:#a23857; }
-</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button><button id="homeSound" class="secondary" aria-label="Play music">♪ Play music</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">YOUR SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><div id="roundupFriends" class="hidden"></div><div id="bossImpact" aria-hidden="true"></div><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
+
+#homeProgress { color:#fff7db; text-align:center; padding:0 12px; font-size:13px; font-weight:800; text-shadow:0 2px 3px #261522; }
+#menu { gap:8px; bottom:max(3%,env(safe-area-inset-bottom)); }
+#menu .secondary { padding:8px 20px; }
+#journal { position:absolute; inset:0; z-index:22; overflow-y:auto; background:#271524f5; display:grid; align-items:safe center; justify-items:center; padding:16px; }
+#journal .panel { max-width:440px; }
+#journal h1 { font-size:26px; }
+#journal p { margin:8px 0; }
+#albumGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:15px 0; }
+.albumCard { border:2px solid #e4b98a; border-radius:15px; padding:8px 3px; background:#fff9eb; font-size:12px; }
+.albumCard img { width:100%; height:76px; object-fit:contain; }
+.albumCard.locked img { filter:grayscale(1); opacity:.25; }
+.albumCard strong, .albumCard small { display:block; }
+#dailyRibbons { display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:12px 0; }
+.ribbon { background:var(--ribbon); color:#52213d; padding:8px; border-radius:12px; font-size:18px; border:2px solid #fff; }
+#dailyMeter { width:100%; accent-color:#dc4164; height:16px; }
+#personalResult { font-weight:900; color:#a22b50; margin:8px 0; }
+#dailyResult { font-size:13px; margin:8px 0; }
+#openAlbumEnd { margin:8px 0; font-size:13px; padding:8px 16px; }
+#cinemaTip { flex:none; padding:0 15px 18px; color:#fff2cb; font-size:16px; font-weight:800; text-align:center; }
+#help .panel { max-height:100%; overflow-y:auto; }
+#help p { text-align:left; font-size:14px; }
+.roundupFriend[data-friend="-1"] span { color:#795c61; }
+@media(max-height:620px) { #menu {gap:5px} #menu .primary {font-size:22px;padding:8px 45px} #menu .secondary {font-size:12px;padding:6px 15px} .albumCard img {height:55px} }
+
+#boardTabs { display:flex; gap:6px; justify-content:center; margin:10px 0; }
+#boardTabs button { border:2px solid #b15a6e; background:#fff8e9; color:#702d43; border-radius:20px; padding:9px 16px; min-height:44px; font-weight:850; }
+#boardTabs button[aria-selected="true"] { background:#8e3552; color:#fff5db; }
+#boardPeriod {font-size:12px;min-height:16px}
+#boardEmpty {font-size:13px}
+</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><div id="homeProgress"></div><button id="play" class="primary">PLAY!</button><button id="openAlbum" class="secondary">MY PAW-SY & DAILY GIFT</button><button id="how" class="secondary">HOW TO PLAY</button><button id="homeSound" class="secondary" aria-label="Play music">♪ Play music</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">YOUR SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><div id="roundupFriends" class="hidden"></div><div id="bossImpact" aria-hidden="true"></div><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
 <div id="bossIntro" class="hidden" role="status"><strong>A WILD NISA HAS APPEARED!</strong><span id="bossCommand" class="hidden">QUICK SMACK HER!</span></div><div id="comboMeter" class="hidden">Hits in a row build a combo</div><div id="comboPopup" class="hidden" role="status"></div>
 <div id="bossLine" class="hidden">NISA HITS 0</div>
-</section><section id="cinema" class="hidden"><img id="scene" alt="Story scene"><div id="cinemaLabel"></div></section><section id="roundResult" class="hidden" aria-live="polite">
+</section><section id="cinema" class="hidden"><img id="scene" alt="Story scene"><div id="cinemaLabel"></div><div id="cinemaTip" class="hidden">CATCH FRIENDS · SKIP TABBIES<br>Collect all 6 · Seconds left = points!</div></section><section id="roundResult" class="hidden" aria-live="polite">
   <div class="panel">
     <h1 id="roundResultText">Round complete!</h1>
     <p id="roundResultPoints"></p><div id="roundupPack" class="hidden" aria-label="Your Paw-sy team"></div>
   </div>
-</section><section id="end" class="hidden"><div class="panel"><h1>MEOW-FEST!</h1><div id="finalScore">0</div><p id="summary"></p>
+</section><section id="end" class="hidden"><div class="panel"><h1>MEOW-FEST!</h1><div id="finalScore">0</div><p id="summary"></p><p id="personalResult"></p><p id="dailyResult"></p>
   <form id="postForm" class="hidden">
     <label for="playerName">Public nickname (optional)</label>
     <input id="playerName" name="playerName" type="text" maxlength="20" placeholder="Player name" autocomplete="off">
@@ -122,16 +152,18 @@
   </form>
   <p id="leaderboardStatus" role="status"></p>
 <button id="again" class="primary">PLAY AGAIN</button>
-<section id="leaderboard" aria-labelledby="leaderboardHeading">
+<br><button id="openAlbumEnd" class="secondary">MY PAW-SY & DAILY GIFT</button><section id="leaderboard" aria-labelledby="leaderboardHeading">
   <h2 id="leaderboardHeading">Leaderboard</h2>
-  <p>Top scores from all players</p>
+  <div id="boardTabs" role="tablist" aria-label="Leaderboard period"><button id="weekTab" role="tab" aria-selected="true" aria-controls="boardPanel">This Week</button><button id="allTab" role="tab" aria-selected="false" tabindex="-1" aria-controls="boardPanel">All Time</button></div><p id="boardPeriod">Mon–Sun · Malaysia time (UTC+8)</p><div id="boardPanel" role="tabpanel" aria-labelledby="weekTab"><p id="boardEmpty"></p>
 
   <table aria-label="Online high scores">
     <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Score</th><th scope="col">Nisa hits</th></tr></thead>
     <tbody id="ranks"></tbody>
-  </table>
+  </table></div>
 
-</section></div></section><section id="help" class="hidden"><div class="panel"><h1>HOW TO PLAY</h1><p>Tap cats to earn one point per hit. In the first round, consecutive hits build a combo. A miss or a gap longer than 0.6 seconds ends the combo. Smack Boss Cat Nisa as often as you can. In Paw-sy Roundup, Catch the friends and skip the tabby distractors. Collect all six in ten seconds. Each second left on the clock earns one Roundup point.</p><button id="closeHelp" class="secondary">GOT IT!</button></div></section><section id="paused" class="hidden"><div class="panel"><h1>PAUSED</h1><button id="resume" class="primary">RESUME</button></div></section></main><script>(()=>{'use strict';const $=id=>document.getElementById(id);const ASSETS={"tabby0":"assets/tabby0.png","tabby5":"assets/tabby5.png","cloud":"assets/cloud.png","tiger":"assets/tiger.png","mango":"assets/mango.png","shadow":"assets/shadow.png","snowball":"assets/snowball.png","oreo":"assets/oreo.png","tabby1":"assets/tabby1.png","return":"assets/return.png","tabby3":"assets/tabby3.png","boss":"assets/boss.png","defeat":"assets/defeat.png","tabby2":"assets/tabby2.png","tabby4":"assets/tabby4.png","landing":"assets/landing.png"};const asset=n=>ASSETS[n];const tabbies=Array.from({length:6},(_,i)=>asset('tabby'+i));const friends=['snowball','shadow','oreo','mango','tiger','cloud'].map(asset);const scenes={defeat:asset('defeat'),return:asset('return')};let phase='menu',score=0,remaining=15,deadline=0,paused=false,raf=0,sceneTimeout=0,sceneRemaining=0,sceneStarted=0,pawHits=0,friendCount=0,awaitingFriend=false,tabbyIndex=0,audioOn=true,token=0;const AUDIO={"meow":"assets/meow.wav","smack":"assets/smack.wav","bossImpact1":"assets/boss-hit-1.wav","bossImpact2":"assets/boss-hit-2.wav","bossImpact3":"assets/boss-hit-3.wav","bossImpact4":"assets/boss-hit-4.wav","bossImpact5":"assets/boss-hit-5.wav","bossImpact6":"assets/boss-hit-6.wav","bossImpact7":"assets/boss-hit-7.wav","bossImpact8":"assets/boss-hit-8.wav","bossMeow1":"assets/boss-meow-1.wav","bossMeow2":"assets/boss-meow-2.wav","bossMeow3":"assets/boss-meow-3.wav","bossMeow4":"assets/boss-meow-4.wav","bossMeow5":"assets/boss-meow-5.wav","impact1":"assets/smack-1.wav","impact2":"assets/smack-2.wav","impact3":"assets/smack-3.wav","impact4":"assets/smack-4.wav","impact5":"assets/smack-5.wav","impact6":"assets/smack-6.wav","music":"assets/background.wav","bossMusic":"assets/boss-music.wav","sadMusic":"assets/sad-music.wav","angry":"assets/meow-angry.wav","attention":"assets/meow-attention.wav","pain":"assets/meow-pain.wav","sweet":"assets/meow-sweet.wav"};
+</section></div></section><section id="journal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="albumTitle"><div class="panel">
+<h1 id="albumTitle">MY PAW-SY</h1><p id="albumBest"></p><div id="albumGrid"></div>
+<h2>Today's little adventure</h2><p>Collect 18 friends across your rounds to earn today's ribbon. Every friend counts!</p><progress id="dailyMeter" max="18" value="0" aria-label="Friends collected today"></progress><p id="dailyProgress"></p><div id="dailyRibbons" aria-label="Daily ribbons"></div><p id="saveNote"></p><button id="closeAlbum" class="secondary">BACK TO THE CATS</button></div></section><section id="help" class="hidden"><div class="panel"><h1>HOW TO PLAY</h1><p><strong>SMACK THAT CAT!</strong> Tap cats: each hit earns 1 point. Keep hitting within 0.6 seconds to build a combo. A miss or a pause ends it.</p><p><strong>BOSS CAT:</strong> Smack Nisa as often as you can during her full 5 seconds!</p><p><strong>PAW-SY ROUNDUP:</strong> Catch named friends, skip tabbies. Collect all 6 in 10 seconds. Finish in 3 seconds to earn 7 points!</p><p><strong>COME BACK FOR A LITTLE ADVENTURE:</strong> Your album and personal best save on this browser. Collect 18 friends in a day for a ribbon. No sign-in, and no penalty for missing a day.</p><button id="closeHelp" class="secondary">GOT IT!</button></div></section><section id="paused" class="hidden"><div class="panel"><h1>PAUSED</h1><button id="resume" class="primary">RESUME</button></div></section></main><script>(()=>{'use strict';const $=id=>document.getElementById(id);const ASSETS={"tabby0":"assets/tabby0.png","tabby5":"assets/tabby5.png","cloud":"assets/cloud.png","tiger":"assets/tiger.png","mango":"assets/mango.png","shadow":"assets/shadow.png","snowball":"assets/snowball.png","oreo":"assets/oreo.png","tabby1":"assets/tabby1.png","return":"assets/return.png","tabby3":"assets/tabby3.png","boss":"assets/boss.png","defeat":"assets/defeat.png","tabby2":"assets/tabby2.png","tabby4":"assets/tabby4.png","landing":"assets/landing.png"};const asset=n=>ASSETS[n];const tabbies=Array.from({length:6},(_,i)=>asset('tabby'+i));const friends=['snowball','shadow','oreo','mango','tiger','cloud'].map(asset);const scenes={defeat:asset('defeat'),return:asset('return')};let phase='menu',score=0,remaining=15,deadline=0,paused=false,raf=0,sceneTimeout=0,sceneRemaining=0,sceneStarted=0,pawHits=0,friendCount=0,awaitingFriend=false,tabbyIndex=0,audioOn=true,token=0;const AUDIO={"meow":"assets/meow.wav","smack":"assets/smack.wav","bossImpact1":"assets/boss-hit-1.wav","bossImpact2":"assets/boss-hit-2.wav","bossImpact3":"assets/boss-hit-3.wav","bossImpact4":"assets/boss-hit-4.wav","bossImpact5":"assets/boss-hit-5.wav","bossImpact6":"assets/boss-hit-6.wav","bossImpact7":"assets/boss-hit-7.wav","bossImpact8":"assets/boss-hit-8.wav","bossMeow1":"assets/boss-meow-1.wav","bossMeow2":"assets/boss-meow-2.wav","bossMeow3":"assets/boss-meow-3.wav","bossMeow4":"assets/boss-meow-4.wav","bossMeow5":"assets/boss-meow-5.wav","impact1":"assets/smack-1.wav","impact2":"assets/smack-2.wav","impact3":"assets/smack-3.wav","impact4":"assets/smack-4.wav","impact5":"assets/smack-5.wav","impact6":"assets/smack-6.wav","music":"assets/background.wav","bossMusic":"assets/boss-music.wav","sadMusic":"assets/sad-music.wav","angry":"assets/meow-angry.wav","attention":"assets/meow-attention.wav","pain":"assets/meow-pain.wav","sweet":"assets/meow-sweet.wav"};
 const show = (id, on) => $(id).classList.toggle('hidden', !on);
 const smackTrack = { name: 'smack', volume: .6, voices: [] };
 const meowTrack = { name: 'meow', volume: .38, voices: [] };
@@ -168,6 +200,75 @@ let nextRoundupFriend = 0;
 let roundupButtons = [];
 let roundupVisible = [];
 let roundupPoints = 0;
+/* Local progress never changes ranked scoring or requires an account. */
+const progressKey = 'smack-pawsy-progress-v1';
+const localDay = () => { const d = new Date(); return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-'); };
+let progress = { best:0, counts:Array(6).fill(0), day:localDay(), today:0, ribbons:[] };
+let canSave = true;
+try {
+  const saved = JSON.parse(localStorage.getItem(progressKey) || 'null');
+  const bounded = n => Number.isSafeInteger(n) && n >= 0 && n <= 100000000;
+  if (saved && bounded(saved.best) && Array.isArray(saved.counts) && saved.counts.length === 6 && saved.counts.every(bounded) && /^\d{4}-\d{2}-\d{2}$/.test(saved.day) && bounded(saved.today) && Array.isArray(saved.ribbons)) {
+    progress = {best:saved.best,counts:saved.counts,day:saved.day,today:Math.min(18,saved.today),ribbons:[...new Set(saved.ribbons.filter(d => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort().slice(-365)};
+  }
+  localStorage.setItem(progressKey,JSON.stringify(progress));
+} catch { canSave = false; }
+function refreshDay() {
+  if (progress.day !== localDay()) { progress.day=localDay(); progress.today=0; }
+}
+function saveProgress() {
+  try { localStorage.setItem(progressKey,JSON.stringify(progress)); canSave=true; }
+  catch { canSave=false; }
+}
+const ribbonColors = ['#ffd791','#ffb7cd','#c7c4ff','#aee7d4','#a9dafa','#e5c89d','#ecd5ff'];
+function renderProgress() {
+  refreshDay();
+  $('homeProgress').textContent = 'Personal best ' + progress.best + ' · Today’s friends ' + progress.today + '/18';
+  $('albumBest').textContent = 'Personal best: ' + progress.best + ' · ' + progress.counts.filter(n=>n>0).length + '/6 friends discovered';
+  $('albumGrid').replaceChildren(...friends.map((src,i) => {
+    const card=document.createElement('div'); card.className='albumCard' + (progress.counts[i] ? '' : ' locked');
+    const img=document.createElement('img'); img.src=src; img.alt=friendNames[i];
+    const name=document.createElement('strong'); name.textContent=friendNames[i];
+    const count=document.createElement('small'); count.textContent=progress.counts[i] ? 'Collected ' + (progress.counts[i]===1 ? 'once' : progress.counts[i] + ' times') : 'Waiting to meet you';
+    card.appendChild(img); card.appendChild(name); card.appendChild(count); return card;
+  }));
+  $('dailyMeter').value=progress.today;
+  $('dailyProgress').textContent=progress.today===18 ? '18/18 · Today’s ribbon is yours! Come play whenever you like.' : progress.today + '/18 · ' + (18-progress.today) + ' more friends for today’s ribbon';
+  $('dailyRibbons').replaceChildren(...progress.ribbons.slice(-7).map(day => {
+    const badge=document.createElement('span'); badge.className='ribbon';
+    badge.style.setProperty('--ribbon',ribbonColors[Math.floor(Date.parse(day+'T12:00:00Z')/86400000)%7]);
+    badge.textContent='✿'; badge.setAttribute('aria-label','Ribbon earned '+day); badge.title='Ribbon earned '+day; return badge;
+  }));
+  $('saveNote').textContent=canSave ? 'Saved on this browser. No sign-in needed. Clearing browser data clears your collection.' : 'Saving is unavailable in this browser. Progress will last for this visit.';
+}
+function rememberRun() {
+  if (rankedRun.progressSaved) return;
+  rankedRun.progressSaved=true;
+  refreshDay();
+  const previousBest=progress.best;
+  const hadRibbon=progress.ribbons.includes(progress.day);
+  progress.best=Math.max(progress.best,score);
+  for (const index of roundupCollected) progress.counts[index]++;
+  progress.today=Math.min(18,progress.today+roundupCollected.size);
+  if (progress.today===18 && !hadRibbon) progress.ribbons.push(progress.day);
+  progress.ribbons=progress.ribbons.slice(-365);
+  saveProgress();
+  $('personalResult').textContent=score>previousBest ? 'New personal best! +' + (score-previousBest) + ' points' : 'Personal best: ' + progress.best + (score<progress.best ? ' · ' + (progress.best-score) + ' points to beat it!' : ' · Matched your best!');
+  $('dailyResult').textContent=!hadRibbon && progress.today===18 ? '✿ Daily gift unlocked! Your new ribbon is in My Paw-sy.' : 'Today’s adventure: ' + progress.today + '/18 friends' + (progress.today===18 ? ' · Ribbon earned!' : ' · Every friend counts.');
+  renderProgress();
+}
+let albumOpener;
+function openAlbum(button) { albumOpener=button; renderProgress(); show('journal',true); $('closeAlbum').focus(); }
+$('openAlbum').onclick=()=>openAlbum($('openAlbum'));
+$('openAlbumEnd').onclick=()=>openAlbum($('openAlbumEnd'));
+function closeAlbum() { show('journal',false); albumOpener?.focus(); }
+$('closeAlbum').onclick=closeAlbum;
+$('journal').addEventListener('keydown',event=>{
+  if(event.key==='Escape') closeAlbum();
+  if(event.key==='Tab') { event.preventDefault(); $('closeAlbum').focus(); }
+});
+renderProgress();
+
 
 const comboGapMs = 600;
 let comboTimer;
@@ -448,6 +549,35 @@ function startRankedRun() {
   };
 }
 
+let boardPeriod = 'week';
+let boardData = {ranks:[],weeklyRanks:[]};
+let postedEntry;
+let boardReadState='loading';
+function renderBoard() {
+  const weekly=boardPeriod==='week';
+  $('weekTab').setAttribute('aria-selected',String(weekly));
+  $('allTab').setAttribute('aria-selected',String(!weekly));
+  $('weekTab').setAttribute('tabindex',weekly?'0':'-1');
+  $('allTab').setAttribute('tabindex',weekly?'-1':'0');
+  $('boardPanel').setAttribute('aria-labelledby',weekly?'weekTab':'allTab');
+  $('boardPeriod').textContent=weekly ? 'Mon–Sun · Resets Monday 00:00 Malaysia time (UTC+8)' : 'All-time high scores · Current scoring rules';
+  const ranks=weekly ? boardData.weeklyRanks : boardData.ranks;
+  $('boardEmpty').textContent=boardReadState==='loading' ? 'Loading scores…' : boardReadState==='error' ? 'Scores are unavailable. Please try after your next round.' : ranks.length ? '' : weekly ? 'A fresh week! Post a score to join the board.' : 'Post a score to set the first high score!';
+  showRanks(ranks,postedEntry);
+}
+for(const [id,period] of [['weekTab','week'],['allTab','all']]) {
+  $(id).onclick=()=>{boardPeriod=period;renderBoard();};
+  $(id).addEventListener('keydown',event=>{
+    if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
+      event.preventDefault(); boardPeriod=event.key==='Home'?'week':event.key==='End'?'all':boardPeriod==='week'?'all':'week';
+      renderBoard(); $(boardPeriod==='week'?'weekTab':'allTab').focus();
+    }
+  });
+}
+function acceptBoard(data) {
+  boardReadState='ready';
+  boardData={ranks:data.ranks || [],weeklyRanks:data.weeklyRanks || []}; renderBoard();
+}
 function showRanks(ranks, entryId) {
   const rows = ranks.map((entry, index) => {
     const row = document.createElement('tr');
@@ -468,22 +598,22 @@ async function showLeaderboard() {
   const post = $('postScore');
   show('postForm', false);
   post.disabled = false;
-  showRanks([]);
+  postedEntry=undefined; boardReadState='loading'; boardData={ranks:[],weeklyRanks:[]}; renderBoard(); $('boardEmpty').textContent='Loading scores…';
   if (!/^https?:$/.test(location.protocol)) {
     status.textContent = 'Open the online game to see the leaderboard.';
     return;
   }
   status.textContent = 'Loading online scores…';
   const readRanks = leaderboardRequest()
-    .then(data => ({ ranks: data.ranks }))
+    .then(data => data)
     .catch(() => ({ ranks: null }));
   const [board, ticket] = await Promise.all([readRanks, run.ticket]);
   if (rankedRun !== run || phase !== 'end') return;
   show('postForm', Boolean(ticket && score > 0));
-  if (board.ranks) showRanks(board.ranks);
+  if (board.ranks) acceptBoard(board); else { boardReadState='error'; renderBoard(); }
   status.textContent = !board.ranks ? 'Could not load online scores.' :
     score > 0 && !ticket ? 'Play another round while online to post a score.' :
-    board.ranks.length ? '' : 'No scores posted yet.';
+    '';
 }
 
 $('postForm').onsubmit = async event => {
@@ -505,9 +635,9 @@ $('postForm').onsubmit = async event => {
       data = await leaderboardRequest(submission);
     }
     if (rankedRun !== run || phase !== 'end') return;
-    const rank = data.ranks.findIndex(entry => entry.id === data.entryId) + 1;
-    showRanks(data.ranks, data.entryId);
-    status.textContent = rank ? 'Score posted at rank ' + rank + '.' : 'Score posted. This run is outside the top ten.';
+    postedEntry=data.entryId; acceptBoard(data);
+    const rank = (boardPeriod==='week'?boardData.weeklyRanks:boardData.ranks).findIndex(entry => entry.id === data.entryId) + 1;
+    status.textContent = rank ? 'Score posted at rank ' + rank + (boardPeriod==='week'?' this week.':' all time.') : 'Score posted. This run is outside the top ten.';
     show('postForm', false);
   } catch (error) {
     if (rankedRun !== run || phase !== 'end') return;
@@ -533,7 +663,7 @@ function renderRoundup() {
     picture.src = index < 0 ? tabbies[Math.floor(Math.random()*tabbies.length)] : friends[index];
     picture.alt = '';
     const label = document.createElement('span');
-    label.textContent = index < 0 ? 'Tabby' : friendNames[index];
+    label.textContent = index < 0 ? 'Tabby · skip' : '✓ ' + friendNames[index];
     button.setAttribute('aria-label', index < 0 ? 'Tabby distractor' : 'Collect ' + friendNames[index]);
     button.replaceChildren(picture,label);
     button.disabled = false;
@@ -704,6 +834,7 @@ function cinema(which) {
   show('game', false);
   show('cinema', true);
   $('scene').src = scenes[which];
+  show('cinemaTip', which === 'return');
   $('cinemaLabel').textContent = which === 'defeat' ? 'POOR NISA!' : 'OH NO! THE CAT HAS BROUGHT ITS PAW-SY!!';
   token++;
   animateTransition($('scene'), true);
@@ -712,6 +843,7 @@ function cinema(which) {
 }
 
 function showRoundResult() {
+  rememberRun();
   phase = 'round-result';
   cancelAnimationFrame(raf);
   show('game', false);

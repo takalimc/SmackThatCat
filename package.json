@@ -1,9 +1,13 @@
 {
   "name": "smack-that-cat",
-  "version": "0.6.19",
+  "version": "0.6.20",
   "private": true,
   "type": "module",
   "dependencies": {
     "@vercel/blob": "2.9.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tests/game.mjs && node tests/leaderboard.mjs"
   }
 }

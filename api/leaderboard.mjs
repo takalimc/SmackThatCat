@@ -1,5 +1,5 @@
 import { get, put, BlobPreconditionFailedError, BlobServiceNotAvailable, BlobServiceRateLimited } from '@vercel/blob';
-import { issueTicket, verifyTicket, countTaps, runCanBePosted, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
+import { issueTicket, verifyTicket, countTaps, runCanBePosted, parsePlayerName, publishEntry, boardResponse } from '../lib/leaderboard.mjs';
 
 const currentPath = 'leaderboard-roundup-clock-v1.json';
 const MAX_REQUEST_BYTES = 12000;
@@ -46,14 +46,14 @@ async function saveScore(run, score, name) {
       etag = current.etag;
       const next = publishEntry(current.state, run, score, Date.now(), name);
       if (next === null) return json({ error: 'The leaderboard is busy. Try again shortly.' }, 503);
-      if (next === current.state) return json({ ranks: publicRanks(current.state), entryId: run.id });
+      if (next === current.state) return json({ ...boardResponse(current.state), entryId: run.id });
       writing = true;
       await put(pathname, JSON.stringify(next), {
         access: 'private',
         contentType: 'application/json',
         ...(etag ? { allowOverwrite: true, ifMatch: etag } : { allowOverwrite: false })
       });
-      return json({ ranks: publicRanks(next), entryId: run.id });
+      return json({ ...boardResponse(next), entryId: run.id });
     } catch (error) {
       const creationRace = writing && !etag && /already exists/i.test(error.message);
       if (!creationRace && !(error instanceof BlobPreconditionFailedError ||
@@ -68,7 +68,7 @@ async function saveScore(run, score, name) {
 export default {
   async fetch(request) {
     try {
-      if (request.method === 'GET') return json({ ranks: publicRanks((await readBoard()).state) });
+      if (request.method === 'GET') return json(boardResponse((await readBoard()).state));
       if (request.method !== 'POST') return json({ error: 'Method not allowed.' }, 405);
       const origin = request.headers.get('origin');
       if (origin && origin !== new URL(request.url).origin) return json({ error: 'Invalid origin.' }, 403);
