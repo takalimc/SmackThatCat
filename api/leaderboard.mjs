@@ -1,7 +1,7 @@
 import { get, put, BlobPreconditionFailedError, BlobServiceNotAvailable, BlobServiceRateLimited } from '@vercel/blob';
 import { issueTicket, verifyTicket, countTaps, runCanBePosted, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
 
-const pathname = 'leaderboard-v1.json';
+const currentPath = 'leaderboard-hits-v2.json';
 const MAX_REQUEST_BYTES = 12000;
 const json = (data, status = 200) => Response.json(data, {
   status,
@@ -9,7 +9,7 @@ const json = (data, status = 200) => Response.json(data, {
 });
 const emptyBoard = () => ({ leaders: [], recent: [] });
 
-async function readBoard() {
+async function readBoard(pathname = currentPath) {
   const result = await get(pathname, { access: 'private', useCache: false });
   if (!result) return { state: emptyBoard() };
   if (!result.stream) throw Error('Missing score data');
@@ -37,11 +37,12 @@ async function readInput(request) {
 }
 
 async function saveScore(run, score, name) {
+  const pathname = run.rules === 'hits-six-v1' ? currentPath : 'leaderboard-v1.json';
   for (let attempt = 0; attempt < 6; attempt++) {
     let etag;
     let writing = false;
     try {
-      const current = await readBoard();
+      const current = await readBoard(pathname);
       etag = current.etag;
       const next = publishEntry(current.state, run, score, Date.now(), name);
       if (next === null) return json({ error: 'The leaderboard is busy. Try again shortly.' }, 503);
@@ -76,7 +77,7 @@ export default {
       const key = process.env.LEADERBOARD_SIGNING_KEY;
       if (!key) throw Error('Missing leaderboard signing key');
       if (input.action === 'start') {
-        const rules = ['combo-v1', 'combo-six-finish'].includes(input.rules) ? input.rules : 'classic';
+        const rules = ['combo-v1', 'combo-six-finish', 'hits-six-v1'].includes(input.rules) ? input.rules : 'classic';
         return json({ ticket: issueTicket(key, Date.now(), rules) });
       }
       const run = verifyTicket(input.ticket, key);

@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.10</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.12 Preview</title><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#261522;font-family:system-ui,-apple-system,sans-serif;color:white}button{cursor:pointer;font:inherit;touch-action:manipulation}#app{position:relative;max-width:650px;height:100dvh;margin:auto;overflow:hidden;background:radial-gradient(circle,#fff5da,#f7bcb3)}.hidden{display:none!important}#home,#game,#cinema,#end,#help,#paused{position:absolute;inset:0}#home{background:#35221e}#poster{width:100%;height:100%;object-fit:cover}#home:after{content:"";position:absolute;inset:65% 0 0;background:linear-gradient(transparent,#24111ad9);pointer-events:none}#menu{position:absolute;bottom:max(5%,env(safe-area-inset-bottom));left:0;right:0;z-index:2;display:grid;justify-items:center;gap:12px}.primary{border:4px solid #fff3d8;border-radius:50px;background:linear-gradient(#ff7286,#e72452);color:white;font-size:27px;font-weight:1000;padding:12px 58px;box-shadow:0 6px #92203c}.secondary{border:2px solid #a34a5a;border-radius:40px;background:#fff3dd;color:#692d43;font-weight:800;padding:10px 25px}#hud{position:absolute;z-index:5;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:5px}.pill{min-width:73px;text-align:center;border-radius:13px;border:2px solid #ffdb95;background:#6b3041;padding:5px 8px;font-size:11px;font-weight:900}.pill strong{display:block;font-size:25px;color:#ffe57a}#tools{display:flex;gap:5px}#tools button{border:2px solid #fff6;border-radius:10px;background:#fff3df;color:#763145;height:43px;min-width:39px}#phase{position:absolute;top:85px;left:6px;right:6px;text-align:center;color:#922b50;font-size:clamp(18px,5vw,26px);font-weight:1000}#arena{position:absolute;inset:145px 8px 105px;overflow:hidden;touch-action:none}#target{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(120px,39vw,240px);height:clamp(120px,39vw,240px);border:0;background:none;padding:0;touch-action:none;transition:left .13s ease-out,top .13s ease-out}#target img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}#target.boss{width:min(65%,260px);height:min(80%,380px)}#target.hit img{animation:boop .16s ease}@keyframes boop{50%{transform:scale(.89) rotate(-5deg)}}#bubble{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(17px,4.2vw,23px);color:#e92859;font-weight:1000;text-shadow:1px 2px white;pointer-events:none}#progress{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:4px;right:4px;text-align:center;color:#782c43;font-weight:900;font-size:13px}#slots{display:flex;justify-content:center;gap:5px;margin-top:7px}.slot{width:clamp(37px,11vw,54px);height:clamp(37px,11vw,54px);border:2px solid #ce8793;border-radius:10px;background:#fff9}.slot img{width:100%;height:100%;object-fit:contain}#cinema{z-index:12;background:#21151e;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}#cinema img{width:100%;height:calc(100% - 96px);min-height:0;object-fit:contain;flex:1}#cinemaLabel{position:relative;flex:none;min-height:90px;padding:12px 16px;display:grid;place-items:center;text-align:center;font-weight:1000;font-size:clamp(18px,4.8vw,29px);line-height:1.12;color:#ffe46c;text-shadow:2px 3px #842441;background:#21151e}#end,#help,#paused{z-index:20;background:#271524e9;display:grid;place-items:center;padding:18px}.panel{background:#fff1d9;border:4px solid #f6bb61;border-radius:23px;color:#702d43;padding:23px;max-width:440px;width:100%;text-align:center}.panel h1{margin:0 0 10px}#finalScore{font-size:58px;font-weight:1000;color:#e83259}#notice{position:absolute;z-index:8;top:23%;left:10%;right:10%;text-align:center;font-weight:1000;font-size:clamp(22px,5vw,32px);color:#ef3b64;text-shadow:2px 2px white;pointer-events:none}#notice.bossNotice{top:112px;font-size:19px}#toast{font-size:14px;min-height:20px}@media(max-height:620px){#arena{inset:125px 8px 75px}#phase{top:75px}#target.boss{height:75%}#progress{font-size:11px}}@media(min-aspect-ratio:1/1){#poster{object-fit:contain}#arena{inset:120px 8px 65px}#target{width:clamp(110px,28vh,230px);height:clamp(110px,28vh,230px)}#target.boss{height:85%}}
 
 /* Use the game’s own hit feedback and keep touch gestures out of the arena. */
@@ -19,6 +19,13 @@
   font-weight: 900;
 }
 #comboMeter strong { color: #a52c52; }
+#comboPopup {
+  position: absolute; z-index: 7; left: 10%; right: 10%; top: 112px;
+  text-align: center; color: #922b50; font-weight: 950;
+  font-size: clamp(16px, 4vw, 23px); pointer-events: none;
+  text-shadow: 1px 1px #fff4dd;
+}
+@media (max-height: 620px) { #comboPopup { top: 102px; font-size: 16px; } }
 #leaderboard table { table-layout: fixed; overflow-wrap: anywhere; }
 #leaderboard th:first-child { width: 13%; }
 #leaderboard th:nth-child(2) { width: 38%; }
@@ -53,8 +60,32 @@
 #roundResult .panel { padding: 21px; }
 #roundResultText { color: #922b50; font-size: clamp(24px, 7vw, 38px); }
 #roundResultPoints { margin: 0; font-weight: 900; }
-</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">YOUR SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
-<div id="comboMeter" class="hidden">Quick taps build a combo</div>
+
+#bossIntro { position:absolute; inset:0; z-index:6; display:grid; place-content:center; gap:18px; padding:22px; text-align:center; background:#462143ed; color:#fff3b9; pointer-events:none; }
+#bossIntro strong { font-size:clamp(25px,7vw,40px); text-shadow:2px 3px #7c254c; }
+#bossIntro span { font-size:clamp(20px,6vw,32px); color:#ffca70; font-weight:950; }
+#game.bossDrama { background:radial-gradient(ellipse at center,#fff2c9 8%,#f4ab79 60%,#ae466d 100%); }
+#bossImpact { position:absolute; inset:4%; z-index:1; pointer-events:none; opacity:0; background:repeating-conic-gradient(from 11deg,transparent 0deg 15deg,#8b2342b0 15deg 18deg,transparent 18deg 30deg); mask-image:radial-gradient(ellipse,transparent 33%,#000 65%,transparent 78%); }
+#target.boss img { filter:drop-shadow(2px 0 #ad3757) drop-shadow(-2px 0 #ad3757) drop-shadow(0 3px #ad3757); }
+#hud { z-index:8; }
+@media (prefers-reduced-motion:reduce) { #bossImpact { display:none; } }
+
+#game { display:grid; grid-template-rows:auto auto 24px minmax(0,1fr) auto; gap:4px; padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom)); }
+#hud { position:relative; inset:auto; }
+#phase { position:relative; inset:auto; }
+#notice, #notice.bossNotice { position:relative; inset:auto; line-height:24px; font-size:16px; grid-row:3; }
+#arena { position:relative; inset:auto; grid-row:4; min-height:0; container-type:size; overflow:hidden; }
+#target { width:min(240px,40vw,94cqw,94cqh); height:min(240px,40vw,94cqw,94cqh); border-radius:50%; }
+#target.boss { width:min(260px,70%,94cqw); height:94%; }
+#bubble { display:none; }
+#progress, #comboMeter, #bossLine { position:relative; inset:auto; grid-row:5; }
+#comboPopup { top:auto; bottom:62px; left:8px; right:8px; }
+#slots .slot { width:min(11vw,46px,12vh); height:min(11vw,46px,12vh); }
+#tools button { min-height:44px; min-width:44px; }
+#home:focus-within { outline:none; }
+@media(prefers-reduced-motion:reduce) { #target { transition:none; } }
+</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">YOUR SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><div id="bossImpact" aria-hidden="true"></div><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
+<div id="bossIntro" class="hidden" role="status"><strong>A WILD NISA HAS APPEARED!</strong><span id="bossCommand" class="hidden">QUICK SMACK HER!</span></div><div id="comboMeter" class="hidden">Hits in a row build a combo</div><div id="comboPopup" class="hidden" role="status"></div>
 <div id="bossLine" class="hidden">“To the basement! To the basement!”</div>
 </section><section id="cinema" class="hidden"><img id="scene" alt="Story scene"><div id="cinemaLabel"></div></section><section id="roundResult" class="hidden" aria-live="polite">
   <div class="panel">
@@ -75,31 +106,42 @@
     <tbody id="ranks"></tbody>
   </table>
   <p id="leaderboardStatus" role="status"></p>
-</section></div></section><section id="help" class="hidden"><div class="panel"><h1>HOW TO PLAY</h1><p>Tap tabbies quickly to build a combo. Smack Boss Cat Nisa as often as you can. In Paw-sy, tap two tabbies and then a friend. Collect all six before the timer runs out.</p><button id="closeHelp" class="secondary">GOT IT!</button></div></section><section id="paused" class="hidden"><div class="panel"><h1>PAUSED</h1><button id="resume" class="primary">RESUME</button></div></section></main><script>(()=>{'use strict';const $=id=>document.getElementById(id);const ASSETS={"tabby0":"assets/tabby0.png","tabby5":"assets/tabby5.png","cloud":"assets/cloud.png","tiger":"assets/tiger.png","mango":"assets/mango.png","shadow":"assets/shadow.png","snowball":"assets/snowball.png","oreo":"assets/oreo.png","tabby1":"assets/tabby1.png","return":"assets/return.png","tabby3":"assets/tabby3.png","boss":"assets/boss.png","defeat":"assets/defeat.png","tabby2":"assets/tabby2.png","tabby4":"assets/tabby4.png","landing":"assets/landing.png"};const asset=n=>ASSETS[n];const tabbies=Array.from({length:6},(_,i)=>asset('tabby'+i));const friends=['snowball','shadow','oreo','mango','tiger','cloud'].map(asset);const scenes={defeat:asset('defeat'),return:asset('return')};let phase='menu',score=0,remaining=15,deadline=0,paused=false,raf=0,sceneTimeout=0,sceneRemaining=0,sceneStarted=0,pawHits=0,friendCount=0,awaitingFriend=false,tabbyIndex=0,audioOn=true,token=0;const AUDIO={"meow":"assets/meow.wav","smack":"assets/smack.wav","music":"assets/background.wav"};
+</section></div></section><section id="help" class="hidden"><div class="panel"><h1>HOW TO PLAY</h1><p>Tap cats to earn one point per hit. In the first round, consecutive hits build a combo. A miss or a gap longer than 0.6 seconds ends the combo. Smack Boss Cat Nisa as often as you can. In Paw-sy, tap two tabbies and then a friend. Collect all six before the timer runs out.</p><button id="closeHelp" class="secondary">GOT IT!</button></div></section><section id="paused" class="hidden"><div class="panel"><h1>PAUSED</h1><button id="resume" class="primary">RESUME</button></div></section></main><script>(()=>{'use strict';const $=id=>document.getElementById(id);const ASSETS={"tabby0":"assets/tabby0.png","tabby5":"assets/tabby5.png","cloud":"assets/cloud.png","tiger":"assets/tiger.png","mango":"assets/mango.png","shadow":"assets/shadow.png","snowball":"assets/snowball.png","oreo":"assets/oreo.png","tabby1":"assets/tabby1.png","return":"assets/return.png","tabby3":"assets/tabby3.png","boss":"assets/boss.png","defeat":"assets/defeat.png","tabby2":"assets/tabby2.png","tabby4":"assets/tabby4.png","landing":"assets/landing.png"};const asset=n=>ASSETS[n];const tabbies=Array.from({length:6},(_,i)=>asset('tabby'+i));const friends=['snowball','shadow','oreo','mango','tiger','cloud'].map(asset);const scenes={defeat:asset('defeat'),return:asset('return')};let phase='menu',score=0,remaining=15,deadline=0,paused=false,raf=0,sceneTimeout=0,sceneRemaining=0,sceneStarted=0,pawHits=0,friendCount=0,awaitingFriend=false,tabbyIndex=0,audioOn=true,token=0;const AUDIO={"meow":"assets/meow.wav","smack":"assets/smack.wav","music":"assets/background.wav","bossMusic":"assets/boss-music.wav","sadMusic":"assets/sad-music.wav","angry":"assets/meow-angry.wav","attention":"assets/meow-attention.wav","pain":"assets/meow-pain.wav","sweet":"assets/meow-sweet.wav"};
 const show = (id, on) => $(id).classList.toggle('hidden', !on);
 const smackTrack = { name: 'smack', volume: .6, voices: [] };
 const meowTrack = { name: 'meow', volume: .38, voices: [] };
 const musicTrack = { name: 'music', volume: .13 };
-const tapTracks = [smackTrack, meowTrack];
-const audioTracks = [...tapTracks, musicTrack];
+const reactionTracks = ['angry', 'attention', 'pain', 'sweet'].map(name => ({
+  name, volume: .32, voices: []
+}));
+const tapTracks = [smackTrack, meowTrack, ...reactionTracks];
+const bossMusicTrack = { name: 'bossMusic', volume: .18 };
+const sadMusicTrack = { name: 'sadMusic', volume: .24 };
+const audioTracks = [...tapTracks, musicTrack, bossMusicTrack, sadMusicTrack];
 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 let audioContext;
 let audioFailed = false;
 let resumeRequest;
 let hitAnimation;
+let impactAnimation;
+let bossArenaAnimation;
+const reactionTimers = new Set();
 const cueVoices = new Set();
 let tabbyStreak = 0;
+const comboGapMs = 600;
+let comboTimer;
+let nextMeowAt = 0;
 let musicVoice;
 let musicOffset = 0;
 
-/* COMBO_RULES */
+
 
 // Each cue is a set of notes with a pitch and a start time in seconds.
 const cues = {
   tabby: [[523.25, 0], [659.25, .09]],
   boss: [[196, 0], [293.66, .12], [196, .24]],
   defeat: [[392, 0], [329.63, .10], [261.63, .20]],
-  return: [[392, 0], [493.88, .10], [587.33, .20]],
+  return: [[130.81,0],[196,0],[261.63,.08],[329.63,.15],[392,.22],[523.25,.31],[659.25,.40],[783.99,.40],[1046.5,.40]],
   paw: [[523.25, 0], [659.25, .09], [783.99, .18]],
   collect: [[659.25, 0], [987.77, .07]],
   allSix: [[523.25, 0], [659.25, .12], [783.99, .24], [1046.5, .39]],
@@ -115,13 +157,13 @@ function playCue(name) {
   const schedule = () => {
     if (!audioOn || paused || context.state !== 'running' || token !== cueToken || phase !== cuePhase) return;
     const start = context.currentTime;
-    const duration = name === 'allSix' ? .24 : .15;
+    const duration = name === 'return' ? .6 : name === 'allSix' ? .24 : .15;
     for (const [pitch, offset] of cues[name]) {
       try {
         const note = context.createOscillator();
         const envelope = context.createGain();
         const at = start + offset;
-        note.type = name === 'boss' ? 'triangle' : 'sine';
+        note.type = ['boss', 'return'].includes(name) ? 'triangle' : 'sine';
         note.frequency.value = pitch;
         envelope.gain.setValueAtTime(0, at);
         envelope.gain.linearRampToValueAtTime(.105, at + .012);
@@ -157,7 +199,7 @@ function prepareAudio() {
       for (const track of audioTracks) Promise.resolve().then(async () => {
         const bytes = await (await fetch(AUDIO[track.name])).arrayBuffer();
         track.buffer = await context.decodeAudioData(bytes);
-        if (track === musicTrack) {
+        if (track === musicTrack || track === bossMusicTrack || track === sadMusicTrack) {
           syncMusic();
           return;
         }
@@ -176,6 +218,8 @@ function prepareAudio() {
 
 function stopTapSounds() {
   stopCues();
+  for (const timer of reactionTimers) clearTimeout(timer);
+  reactionTimers.clear();
   for (const track of tapTracks) {
     track.voices.splice(0).forEach(voice => voice.stop());
     if (track.player) track.player.pause();
@@ -190,7 +234,13 @@ function playTrack(track, rate = 1, delay = 0) {
       track.player.volume = track.volume;
       track.player.playbackRate = rate;
       track.player.currentTime = 0;
-      track.player.play().catch(() => {});
+      if (delay) {
+        const timer = setTimeout(() => {
+          reactionTimers.delete(timer);
+          if (audioOn && !paused) track.player.play().catch(() => {});
+        }, delay * 1000);
+        reactionTimers.add(timer);
+      } else track.player.play().catch(() => {});
       return;
     }
     if (!track.buffer || audioContext.state !== 'running') return;
@@ -214,37 +264,43 @@ function sound() {
   if (!audioOn) return;
   prepareAudio();
   playTrack(smackTrack);
-  playTrack(meowTrack, .94 + Math.random() * .18);
+  if (performance.now() >= nextMeowAt) {
+    const reaction = reactionTracks[Math.floor(Math.random() * reactionTracks.length)];
+    playTrack(reaction, 1, .09);
+    nextMeowAt = performance.now() + 320;
+  }
 }
 
 function syncMusic() {
   const wanted = audioOn && !paused && phase !== 'menu' && phase !== 'end';
   const context = audioContext;
-  if (!context || !musicTrack.buffer) return;
-  if (!wanted && musicVoice) {
+  const track = phase === 'defeat' ? sadMusicTrack : ['boss-intro', 'boss'].includes(phase) ? bossMusicTrack : musicTrack;
+  if (!context) return;
+  if (musicVoice && (!wanted || musicVoice.track !== track)) {
     const { source, gain, started } = musicVoice;
     const now = context.currentTime;
-    musicOffset = (musicOffset + Math.max(0, now - started)) % musicTrack.buffer.duration;
+    musicOffset = musicVoice.track === track ? (musicOffset + Math.max(0, now - started)) % musicVoice.track.buffer.duration : 0;
     gain.gain.cancelScheduledValues(now);
     gain.gain.setTargetAtTime(0, now, .045);
     source.stop(now + .23);
     musicVoice = undefined;
-  } else if (wanted && !musicVoice && context.state === 'running') {
+  }
+  if (wanted && !musicVoice && track.buffer && context.state === 'running') {
     const source = context.createBufferSource();
     const gain = context.createGain();
     const now = context.currentTime;
-    source.buffer = musicTrack.buffer;
+    source.buffer = track.buffer;
     source.loop = true;
     source.connect(gain);
     gain.connect(context.destination);
     gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(musicTrack.volume, now + .5);
+    gain.gain.linearRampToValueAtTime(track.volume, now + .4);
     source.onended = () => {
       source.disconnect();
       gain.disconnect();
     };
     source.start(now, musicOffset);
-    musicVoice = { source, gain, started: now };
+    musicVoice = { source, gain, track, started: now };
   }
 }
 
@@ -258,6 +314,21 @@ function animateTransition(element, isScene = false) {
 
 function playHitAnimation() {
   const cat = $('cat');
+  if (phase === 'boss' && cat.animate) {
+    hitAnimation?.cancel();
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    hitAnimation = cat.animate(reduced
+      ? [{opacity:.8},{opacity:1}]
+      : [{transform:'translateX(0) rotate(0)'},{transform:'translateX(-7px) rotate(-4deg)'},{transform:'translateX(7px) rotate(4deg)'},{transform:'translateX(-5px) rotate(-2deg)'},{transform:'none'}],
+      {duration:220,easing:'ease-out'});
+    if (!reduced) {
+      impactAnimation?.cancel();
+      impactAnimation = $('bossImpact').animate([{opacity:.85,transform:'scale(.95)'},{opacity:0,transform:'scale(1.08)'}],220);
+      bossArenaAnimation?.cancel();
+      bossArenaAnimation = $('arena').animate([{transform:'translateX(-2px)'},{transform:'translateX(2px)'},{transform:'none'}],120);
+    }
+    return;
+  }
   if (cat.animate) {
     hitAnimation?.cancel();
     hitAnimation = cat.animate([
@@ -296,7 +367,7 @@ function startRankedRun() {
   rankedRun = {
     taps: { tabby: [], boss: [], paw: [] },
     ticket: /^https?:$/.test(location.protocol)
-      ? leaderboardRequest({ action: 'start', rules: 'combo-six-finish' }).then(data => data.ticket).catch(() => null)
+      ? leaderboardRequest({ action: 'start', rules: 'hits-six-v1' }).then(data => data.ticket).catch(() => null)
       : Promise.resolve(null)
   };
 }
@@ -369,12 +440,17 @@ $('postForm').onsubmit = async event => {
   }
 };
 
-function image(src){$('cat').src=src}function move(center=false){const target=$('target');if(center||phase==='boss'){target.style.left='50%';target.style.top='50%';return}const arena=$('arena'),w=arena.clientWidth,h=arena.clientHeight,tw=target.offsetWidth,th=target.offsetHeight;const x=tw/2+Math.random()*Math.max(0,w-tw),y=th/2+Math.random()*Math.max(0,h-th);target.style.left=x+'px';target.style.top=y+'px'}function nextTabby(){$('target').setAttribute('aria-label','Tap cat');tabbyIndex=(tabbyIndex+1)%6;image(tabbies[tabbyIndex]);move()}function reset(){stopTapSounds();tabbyStreak=0;musicOffset=0;clearTimeout(sceneTimeout);cancelAnimationFrame(raf);token++;score=0;pawHits=0;friendCount=0;awaitingFriend=false;tabbyIndex=0;paused=false;$('score').textContent='0';$('progressText').textContent='PAW-SY COLLECTED 0/6';$('slots').innerHTML=Array.from({length:6},()=>'<div class="slot"></div>').join('');$('bubble').textContent='';$('notice').textContent='';$('notice').className='';$('target').className='';$('target').setAttribute('aria-label','Tap cat');show('home',false);show('end',false);show('roundResult',false);show('cinema',false);show('paused',false);show('game',true)}function begin(p,duration){
+function image(src){$('cat').src=src}function move(center=false){const target=$('target');if(center||phase==='boss'){target.style.left='50%';target.style.top='50%';return}const arena=$('arena'),w=arena.clientWidth,h=arena.clientHeight,tw=target.offsetWidth,th=target.offsetHeight;const x=tw/2+Math.random()*Math.max(0,w-tw),y=th/2+Math.random()*Math.max(0,h-th);target.style.left=x+'px';target.style.top=y+'px'}function nextTabby(){$('target').setAttribute('aria-label','Tap cat');tabbyIndex=(tabbyIndex+1)%6;image(tabbies[tabbyIndex]);move()}function reset(){stopTapSounds();tabbyStreak=0;clearTimeout(comboTimer);show('comboPopup',false);musicOffset=0;nextMeowAt=0;clearTimeout(sceneTimeout);cancelAnimationFrame(raf);token++;score=0;pawHits=0;friendCount=0;awaitingFriend=false;tabbyIndex=0;paused=false;$('score').textContent='0';$('progressText').textContent='PAW-SY COLLECTED 0/6';$('slots').innerHTML=Array.from({length:6},()=>'<div class="slot"></div>').join('');$('bubble').textContent='';$('notice').textContent='';$('notice').className='';$('target').className='';$('target').setAttribute('aria-label','Tap cat');show('home',false);show('end',false);show('roundResult',false);show('bossIntro',false);$('game').classList.remove('bossDrama');show('cinema',false);show('paused',false);show('game',true)}function begin(p,duration){
   phase=p;
+  show('bossIntro', false);
+  $('game').classList.toggle('bossDrama', p === 'boss');
+  syncMusic();
   show('progress', p === 'paw');
   show('comboMeter', p === 'tabby');
+  clearTimeout(comboTimer);
+  show('comboPopup', false);
   show('bossLine', p === 'boss');
-  $('comboMeter').textContent = 'Quick taps build a combo';
+  $('comboMeter').textContent = 'Hits in a row build a combo';
   remaining=duration;deadline=performance.now()+duration*1000;$('phase').textContent=p==='tabby'?'SMACK THAT CAT!':p==='boss'?'BOSS CAT':'PAW-SY COLLECTION';$('target').classList.toggle('boss',p==='boss');$('time').textContent=duration;$('bubble').textContent='';$('notice').textContent='';$('notice').className='';if(p==='boss'){image(asset('boss'));move(true)}else{awaitingFriend=false;image(tabbies[tabbyIndex]);move(true)}
   animateTransition($('phase'));
   playCue(p);
@@ -385,21 +461,75 @@ function image(src){$('cat').src=src}function move(center=false){const target=$(
     const run = rankedRun;
     run.scoreTarget = leaderboardRequest().then(data => { run.highest = data.ranks[0]?.score ?? 0; }).catch(() => {});
   }
-  cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}function tick(now){if(paused)return;
-if (phase === 'tabby' && tabbyStreak) {
-  const lastTap = rankedRun.taps.tabby.at(-1);
-  const activeTime = rankedDurations.tabby - (deadline - now);
-  if (Math.floor(activeTime) - lastTap > COMBO_GAP_MS) {
-    tabbyStreak = 0;
-    $('comboMeter').textContent = 'Quick taps build a combo';
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}function bossEntrance() {
+  phase = 'boss-intro';
+  deadline = performance.now() + 1800;
+  show('target', false);
+  show('comboMeter', false);
+  show('comboPopup', false);
+  clearTimeout(comboTimer);
+  show('bossIntro', true);
+  show('bossCommand', false);
+  $('game').classList.add('bossDrama');
+  $('phase').textContent = 'BOSS CAT';
+  $('time').textContent = '5';
+  playCue('boss');
+  syncMusic();
+  animateTransition($('bossIntro'));
+  raf = requestAnimationFrame(tick);
+}
+
+function tick(now){if(paused)return;
+if (phase === 'boss-intro') {
+  const left = deadline - now;
+  if (left <= 950 && $('bossCommand').classList.contains('hidden')) {
+    show('bossCommand', true);
+    animateTransition($('bossCommand'));
+    playCue('paw');
   }
+  if (left <= 0) {
+    show('target', true);
+    begin('boss',5);
+  } else raf = requestAnimationFrame(tick);
+  return;
+}
+if (phase === 'defeat' || phase === 'return') {
+  if (now >= deadline) {
+    if (phase === 'defeat') cinema('return');
+    else { show('cinema', false); show('game', true); begin('paw',10); }
+  } else raf = requestAnimationFrame(tick);
+  return;
+}
+if (phase === 'round-result') {
+  if (now >= deadline) finish();
+  else raf = requestAnimationFrame(tick);
+  return;
+}
+if (phase === 'tabby' && tabbyStreak) {
+  const elapsed = Math.floor(rankedDurations.tabby - (deadline - now));
+  if (elapsed - rankedRun.taps.tabby.at(-1) > comboGapMs) endCombo();
 }
 remaining=Math.max(0,(deadline-now)/1000);
 $('time').textContent=Math.ceil(remaining);
-if(remaining<=0){if(phase==='tabby')begin('boss',5);else if(phase==='boss')cinema('defeat');else if (phase === 'paw') showRoundResult();
+if(remaining<=0){if(phase==='tabby')bossEntrance();else if(phase==='boss')cinema('defeat');else if (phase === 'paw') showRoundResult();
   return
 }
-raf=requestAnimationFrame(tick)}function cinema(which){cancelAnimationFrame(raf);phase=which;show('game',false);show('cinema',true);$('scene').src=scenes[which];$('cinemaLabel').textContent=which==='defeat'?'POOR NISA!':'OH NO! THE CAT HAS BROUGHT ITS PAW-SY!!';const t=++token;animateTransition($('scene'), true);playCue(which);sceneTimeout=setTimeout(()=>{if(t!==token)return;if(which==='defeat')cinema('return');else{show('cinema',false);show('game',true);begin('paw',10)}},which==='defeat'?2100:2500)}function showRoundResult() {
+raf=requestAnimationFrame(tick)}function cinema(which) {
+  cancelAnimationFrame(raf);
+  phase = which;
+  deadline = performance.now() + (which === 'defeat' ? 2100 : 2500);
+  syncMusic();
+  show('game', false);
+  show('cinema', true);
+  $('scene').src = scenes[which];
+  $('cinemaLabel').textContent = which === 'defeat' ? 'POOR NISA!' : 'OH NO! THE CAT HAS BROUGHT ITS PAW-SY!!';
+  token++;
+  animateTransition($('scene'), true);
+  playCue(which);
+  raf = requestAnimationFrame(tick);
+}
+
+function showRoundResult() {
   phase = 'round-result';
   cancelAnimationFrame(raf);
   show('game', false);
@@ -428,7 +558,8 @@ raf=requestAnimationFrame(tick)}function cinema(which){cancelAnimationFrame(raf)
   if (run.highest === undefined && run.scoreTarget) run.scoreTarget.then(reveal);
   else reveal();
   animateTransition(title);
-  sceneTimeout = setTimeout(finish, 1550);
+  deadline = performance.now() + 1550;
+  raf = requestAnimationFrame(tick);
 }
 
 function finish() {
@@ -441,6 +572,26 @@ function finish() {
   showLeaderboard();
 }
 
+function endCombo() {
+  if (tabbyStreak) showCombo(tabbyStreak + '-hit combo! Try again!');
+  tabbyStreak = 0;
+  $('comboMeter').textContent = 'Hits in a row build a combo';
+}
+
+function showCombo(message) {
+  clearTimeout(comboTimer);
+  $('comboPopup').textContent = message;
+  show('comboPopup', true);
+  animateTransition($('comboPopup'));
+  comboTimer = setTimeout(() => show('comboPopup', false), 850);
+}
+
+$('arena').addEventListener('pointerdown', event => {
+  if (phase !== 'tabby' || paused || !event.isPrimary || event.button !== 0 ||
+      event.target.closest('#target') || performance.now() >= deadline) return;
+  endCombo();
+});
+
 function hit(e) {
   const now = performance.now();
   if (!e.isPrimary || e.button !== 0 || paused || $('target').classList.contains('hidden') ||
@@ -448,14 +599,17 @@ function hit(e) {
   e.preventDefault();
   const activeTime = Math.max(0, Math.floor(rankedDurations[phase] - (deadline - now)));
   const taps = rankedRun.taps[phase];
-  let points = 1;
   if (phase === 'tabby') {
-    tabbyStreak = nextStreak(tabbyStreak, activeTime - (taps.at(-1) ?? -Infinity));
-    points = comboMultiplier(tabbyStreak);
-    $('comboMeter').textContent = 'Combo ' + tabbyStreak + ' · ' + points + '× points';
+    if (tabbyStreak && activeTime - taps.at(-1) > comboGapMs) endCombo();
+    tabbyStreak++;
+    $('comboMeter').textContent = tabbyStreak + '-hit combo';
+    if (tabbyStreak % 5 === 0) {
+      const word = tabbyStreak >= 20 ? 'Amazing!' : tabbyStreak >= 10 ? 'Awesome!' : 'Great!';
+      showCombo(word + ' ' + tabbyStreak + '-hit combo');
+    }
   }
   taps.push(activeTime);
-  score += points;
+  score++;
   $('score').textContent = score;
   sound();
   playHitAnimation();
@@ -471,15 +625,16 @@ if(awaitingFriend){
    return;
  }
  playCue('collect');
+ $('notice').textContent='';
  nextTabby();
  $('bubble').textContent = '';
 }else{
  pawHits++;
- if(pawHits===2){awaitingFriend=true;image(friends[friendCount]);move(true);playTrack(meowTrack,1.16,.09);$('bubble').textContent='TAP TO COLLECT!';$('target').setAttribute('aria-label','Collect '+['Snowball','Shadow','Oreo','Mango','Tiger','Cloud'][friendCount]);}
+ if(pawHits===2){awaitingFriend=true;image(friends[friendCount]);move(true);playTrack(meowTrack,1.16,.09);$('bubble').textContent='TAP TO COLLECT!';$('notice').textContent='TAP TO COLLECT!';$('target').setAttribute('aria-label','Collect '+['Snowball','Shadow','Oreo','Mango','Tiger','Cloud'][friendCount]);}
  else{nextTabby();$('bubble').textContent='';}
 }
 }else{nextTabby();if(score%9===0)$('bubble').textContent='PURR-FECT!';else $('bubble').textContent=''}}function start(){prepareAudio();reset();startRankedRun();begin('tabby',15)}function pause() {
-  if (!['tabby', 'boss', 'paw'].includes(phase)) return;
+  if (!['tabby', 'boss-intro', 'boss', 'paw', 'defeat', 'return', 'round-result'].includes(phase)) return;
   const now = performance.now();
   if (!paused) {
     paused = true;
@@ -496,4 +651,10 @@ if(awaitingFriend){
     show('paused', false);
     raf = requestAnimationFrame(tick);
   }
-}$('target').addEventListener('pointerdown',hit);$('play').onclick=start;$('again').onclick=start;$('how').onclick=()=>show('help',true);$('closeHelp').onclick=()=>show('help',false);$('sound').onclick=()=>{audioOn=!audioOn;if(audioOn)prepareAudio();else stopTapSounds();syncMusic();$('sound').textContent=audioOn?'🔊':'🔇'};$('pause').onclick=pause;$('resume').onclick=pause;document.addEventListener('visibilitychange',()=>{if(document.hidden&&!paused&&['tabby','boss','paw'].includes(phase))pause()});for(const src of [...tabbies,...friends,asset('boss'),...Object.values(scenes),asset('landing')]){const im=new Image();im.src=src}window.__smackQA=()=>({phase,score,remaining,pawHits,friendCount,awaitingFriend});})();</script></body></html>
+}$('target').addEventListener('pointerdown',hit);
+$('target').addEventListener('click', event => {
+  if (event.detail === 0) hit({ isPrimary: true, button: 0, preventDefault: () => event.preventDefault() });
+});
+$('target').addEventListener('keydown', event => {
+  if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
+});$('play').onclick=start;$('again').onclick=start;$('how').onclick=()=>show('help',true);$('closeHelp').onclick=()=>show('help',false);$('sound').onclick=()=>{audioOn=!audioOn;if(audioOn)prepareAudio();else stopTapSounds();syncMusic();$('sound').textContent=audioOn?'🔊':'🔇'};$('pause').onclick=pause;$('resume').onclick=pause;document.addEventListener('visibilitychange',()=>{if(document.hidden&&!paused&&['tabby','boss-intro','boss','paw','defeat','return','round-result'].includes(phase))pause()});for(const src of [...tabbies,...friends,asset('boss'),...Object.values(scenes),asset('landing')]){const im=new Image();im.src=src}window.__smackQA=()=>({phase,score,remaining,pawHits,friendCount,awaitingFriend});})();</script></body></html>

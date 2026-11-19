@@ -1,9 +1,22 @@
-# Smack That Cat! v0.6.10
+# Smack That Cat! v0.6.12 review
 
-The opening mode is SMACK THAT CAT! Quick hits within 0.60 seconds build a combo. Hits earn 2× points from the third consecutive hit and 3× from the sixth. Each round starts at zero. Paw-sy ends on the sixth friend or when the 10-second timer runs out.
+This build is staged for review. The public game is still v0.6.9.
 
-The original artwork, taps and meows are joined by a soft original instrumental loop. The mute button controls music and effects. Boss Cat's quote stays on screen during the round. The leaderboard shows the posted nickname, score, and Nisa hits.
+Each hit earns one point. Consecutive opening-round hits build a separate combo which ends on a miss or a gap longer than 0.6 seconds. Random supplied meows follow the smack with a short spacing rule so rapid tapping does not keep cancelling every meow.
 
-The leaderboard validates timing against each release's scoring rules, including a successful early finish. It retries transient storage writes using the same run ID, so a retry cannot post the score twice. Private storage keeps the top ten and recently used run IDs without retaining tap times.
+The boss introduction precedes the full five-second timer. Boss hits shake Nisa with action lines and an outline. Music changes for the boss, eviction and return. Pause and background handling preserve cinematic time as well as play time. The round ends on collecting six friends or timing out, followed by the high-score reveal and optional named leaderboard post.
 
-Run npm ci and node build.mjs to build dist/index.html. The checked build includes the original 16 PNGs and two WAVs plus an original background loop. The standalone works offline. The online standings require the linked private Vercel Blob store and server-only LEADERBOARD_SIGNING_KEY.
+Hosted assets are resized copies. The full-resolution source images remain in the repository's original asset files. Run npm ci and node build.mjs to create dist. The hosted game is about 8 MB. The build serves assets as separate files.
+
+The one-point leaderboard uses leaderboard-hits-v2.json. Previous multiplier standings remain in leaderboard-v1.json. Existing sessions from earlier releases remain compatible. The server validates score and phase timestamps and uses optimistic concurrency and retries when writing. This is a casual leaderboard and browser-generated inputs are not proof of human play.
+
+## QA performed
+
+- Controlled-clock checks passed for visible idle combo expiry, one-point scoring, pause through both cinematics, full Paw-sy time, early six-cat ending, mute/music behavior and reset.
+- A complete browser run at a short landscape size passed. The target fit in the arena and friend instructions were visible.
+- A browser run through the local review page connected to the staged Vercel server started at zero, collected six friends, posted QA Test Cat with 19 points and zero Nisa hits, and restarted at zero.
+- Submitting the same signed test session twice returned the same entry ID and exactly one leaderboard row.
+- The fresh standings currently contain labeled QA entries. The older board has not been deleted.
+- Real iPhone/Android touch and audio output remain unverified. The 320-pixel viewport override could not be confirmed reliably in the browser tool, so narrow-device QA remains pending.
+
+The staging test used the project's Vercel automation access. Project protection is enabled for the review URL. The public game's domain was not promoted.
