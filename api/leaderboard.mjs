@@ -1,7 +1,7 @@
 import { get, put, BlobPreconditionFailedError, BlobServiceNotAvailable, BlobServiceRateLimited } from '@vercel/blob';
 import { issueTicket, verifyTicket, countTaps, runCanBePosted, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
 
-const currentPath = 'leaderboard-roundup-trial.json';
+const currentPath = 'leaderboard-roundup-clock-v1.json';
 const MAX_REQUEST_BYTES = 12000;
 const json = (data, status = 200) => Response.json(data, {
   status,
@@ -37,7 +37,7 @@ async function readInput(request) {
 }
 
 async function saveScore(run, score, name) {
-  const pathname = run.rules === 'roundup-v1' ? currentPath : run.rules === 'hits-six-v1' ? 'leaderboard-hits-v3.json' : 'leaderboard-v1.json';
+  const pathname = run.rules === 'roundup-clock-v1' ? currentPath : run.rules === 'roundup-v1' ? 'leaderboard-roundup-trial.json' : run.rules === 'hits-six-v1' ? 'leaderboard-hits-v3.json' : 'leaderboard-v1.json';
   for (let attempt = 0; attempt < 6; attempt++) {
     let etag;
     let writing = false;
@@ -77,7 +77,7 @@ export default {
       const key = process.env.LEADERBOARD_SIGNING_KEY;
       if (!key) throw Error('Missing leaderboard signing key');
       if (input.action === 'start') {
-        const rules = ['combo-v1', 'combo-six-finish', 'hits-six-v1', 'roundup-v1'].includes(input.rules) ? input.rules : 'classic';
+        const rules = ['combo-v1', 'combo-six-finish', 'hits-six-v1', 'roundup-v1', 'roundup-clock-v1'].includes(input.rules) ? input.rules : 'classic';
         return json({ ticket: issueTicket(key, Date.now(), rules) });
       }
       const run = verifyTicket(input.ticket, key);

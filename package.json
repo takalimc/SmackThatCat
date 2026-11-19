@@ -1,6 +1,6 @@
 {
   "name": "smack-that-cat",
-  "version": "0.6.18",
+  "version": "0.6.19",
   "private": true,
   "type": "module",
   "dependencies": {

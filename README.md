@@ -1,9 +1,9 @@
-# Paw-sy Roundup trial
+# Smack That Cat! v0.6.19
 
-This trial changes the final round only. Three friends appear at a time. A single deliberate tap collects a friend and refills that space until all six are collected. Collected friends cannot reappear. The round ends on the sixth collection or at ten seconds, and the collected team appears in the result reveal.
+Paw-sy Roundup shows two friends and a tabby distractor. After every collection, remaining friends refill and their positions shuffle. Tabby distractors give feedback and no score. Friends remain collected. When one friend remains, two distractors appear.
 
-Opening tapping and Boss Cat retain their normal scoring and timers. Scores use the separate roundup-v1 rules and leaderboard-roundup-trial.json store, so public standings from the original final round are preserved.
+The round lasts at most ten seconds and ends on the sixth friend. Roundup points equal the whole seconds displayed on the clock at completion, rounded up from the remaining milliseconds. Completion at exactly three seconds earns seven points. An incomplete team earns zero Roundup points. Opening and boss hits still earn one point per hit.
 
-Run npm ci and node build.mjs. The original full-resolution artwork remains in the repository history. This build uses optimized gameplay assets.
+The score reveal shows tap points plus Roundup points and presents the collected team together. The new time-based leaderboard uses leaderboard-roundup-clock-v1.json. Earlier Roundup standings remain in leaderboard-roundup-trial.json and old sessions can still submit under their original rules.
 
-Code checks passed for three visible friends, refills, duplicate suppression, keyboard event handling, pause, timeout, restart and six-member celebration. The trial is deployed for review, without promoting the public game domain.
+Tests passed for decoys, shuffled unique pickups, six catches in three seconds, client/server scoring agreement, millisecond boundaries, partial completion, late presses and restart. Run npm ci and node build.mjs to build the hosted game.
