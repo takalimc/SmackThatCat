@@ -1,7 +1,7 @@
-# Smack That Cat! v0.6.5
+# Smack That Cat! v0.6.6
 
-This repository packages the supplied standalone tapping game. The first screen, play controls, timings, scoring, cinematics, artwork, and audio are all from the original v0.6.5 file.
+This patch preserves the original tapping game, artwork, sound files, scoring and phase sequence. It removes the browser tap highlight, blocks zoom gestures in the arena, removes the artificial tap cooldown, and decodes the original tap sounds once for immediate playback.
 
-The repository stores the 16 original PNGs and two WAVs as individual files with an `original-` prefix. The build embeds them into the unchanged game template and verifies the result against the SHA-256 checksum of the original standalone. Vercel publishes only the verified build.
+The 16 PNGs and two WAVs are the original assets. The build embeds them into the game template and verifies the result against `release.sha256`. The original v0.6.5 checksum remains in `baseline.sha256` and matches the original backup commit.
 
 Run `node build.mjs`, then open `dist/index.html` to play. For Vercel, import the repository at its root.

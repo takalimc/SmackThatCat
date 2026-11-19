@@ -13,8 +13,8 @@ for (const path of references) {
   const mime = path.endsWith('.png') ? 'image/png' : 'audio/wav';
   html = html.replaceAll(path, 'data:' + mime + ';base64,' + asset.toString('base64'));
 }
-const expected = (await readFile(resolve(root, 'baseline.sha256'), 'utf8')).trim();
-assert.equal(createHash('sha256').update(html).digest('hex'), expected, 'The build differs from the supplied v0.6.5 standalone.');
+const expected = (await readFile(resolve(root, 'release.sha256'), 'utf8')).trim();
+assert.equal(createHash('sha256').update(html).digest('hex'), expected, 'The build differs from the verified v0.6.6 release.');
 const output = resolve(root, 'dist/index.html');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);
