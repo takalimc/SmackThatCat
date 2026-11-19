@@ -14,7 +14,7 @@ for (const path of references) {
   html = html.replaceAll(path, 'data:' + mime + ';base64,' + asset.toString('base64'));
 }
 const expected = (await readFile(resolve(root, 'release.sha256'), 'utf8')).trim();
-assert.equal(createHash('sha256').update(html).digest('hex'), expected, 'The build differs from the verified v0.6.6 release.');
+assert.equal(createHash('sha256').update(html).digest('hex'), expected, 'The build differs from the verified v0.6.7 release.');
 const output = resolve(root, 'dist/index.html');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);
