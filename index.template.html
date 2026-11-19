@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.14</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.15</title><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#261522;font-family:system-ui,-apple-system,sans-serif;color:white}button{cursor:pointer;font:inherit;touch-action:manipulation}#app{position:relative;max-width:650px;height:100dvh;margin:auto;overflow:hidden;background:radial-gradient(circle,#fff5da,#f7bcb3)}.hidden{display:none!important}#home,#game,#cinema,#end,#help,#paused{position:absolute;inset:0}#home{background:#35221e}#poster{width:100%;height:100%;object-fit:cover}#home:after{content:"";position:absolute;inset:65% 0 0;background:linear-gradient(transparent,#24111ad9);pointer-events:none}#menu{position:absolute;bottom:max(5%,env(safe-area-inset-bottom));left:0;right:0;z-index:2;display:grid;justify-items:center;gap:12px}.primary{border:4px solid #fff3d8;border-radius:50px;background:linear-gradient(#ff7286,#e72452);color:white;font-size:27px;font-weight:1000;padding:12px 58px;box-shadow:0 6px #92203c}.secondary{border:2px solid #a34a5a;border-radius:40px;background:#fff3dd;color:#692d43;font-weight:800;padding:10px 25px}#hud{position:absolute;z-index:5;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:5px}.pill{min-width:73px;text-align:center;border-radius:13px;border:2px solid #ffdb95;background:#6b3041;padding:5px 8px;font-size:11px;font-weight:900}.pill strong{display:block;font-size:25px;color:#ffe57a}#tools{display:flex;gap:5px}#tools button{border:2px solid #fff6;border-radius:10px;background:#fff3df;color:#763145;height:43px;min-width:39px}#phase{position:absolute;top:85px;left:6px;right:6px;text-align:center;color:#922b50;font-size:clamp(18px,5vw,26px);font-weight:1000}#arena{position:absolute;inset:145px 8px 105px;overflow:hidden;touch-action:none}#target{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(120px,39vw,240px);height:clamp(120px,39vw,240px);border:0;background:none;padding:0;touch-action:none;transition:left .13s ease-out,top .13s ease-out}#target img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}#target.boss{width:min(65%,260px);height:min(80%,380px)}#target.hit img{animation:boop .16s ease}@keyframes boop{50%{transform:scale(.89) rotate(-5deg)}}#bubble{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(17px,4.2vw,23px);color:#e92859;font-weight:1000;text-shadow:1px 2px white;pointer-events:none}#progress{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:4px;right:4px;text-align:center;color:#782c43;font-weight:900;font-size:13px}#slots{display:flex;justify-content:center;gap:5px;margin-top:7px}.slot{width:clamp(37px,11vw,54px);height:clamp(37px,11vw,54px);border:2px solid #ce8793;border-radius:10px;background:#fff9}.slot img{width:100%;height:100%;object-fit:contain}#cinema{z-index:12;background:#21151e;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}#cinema img{width:100%;height:calc(100% - 96px);min-height:0;object-fit:contain;flex:1}#cinemaLabel{position:relative;flex:none;min-height:90px;padding:12px 16px;display:grid;place-items:center;text-align:center;font-weight:1000;font-size:clamp(18px,4.8vw,29px);line-height:1.12;color:#ffe46c;text-shadow:2px 3px #842441;background:#21151e}#end,#help,#paused{z-index:20;background:#271524e9;display:grid;place-items:center;padding:18px}.panel{background:#fff1d9;border:4px solid #f6bb61;border-radius:23px;color:#702d43;padding:23px;max-width:440px;width:100%;text-align:center}.panel h1{margin:0 0 10px}#finalScore{font-size:58px;font-weight:1000;color:#e83259}#notice{position:absolute;z-index:8;top:23%;left:10%;right:10%;text-align:center;font-weight:1000;font-size:clamp(22px,5vw,32px);color:#ef3b64;text-shadow:2px 2px white;pointer-events:none}#notice.bossNotice{top:112px;font-size:19px}#toast{font-size:14px;min-height:20px}@media(max-height:620px){#arena{inset:125px 8px 75px}#phase{top:75px}#target.boss{height:75%}#progress{font-size:11px}}@media(min-aspect-ratio:1/1){#poster{object-fit:contain}#arena{inset:120px 8px 65px}#target{width:clamp(110px,28vh,230px);height:clamp(110px,28vh,230px)}#target.boss{height:85%}}
 
 /* Use the game’s own hit feedback and keep touch gestures out of the arena. */
@@ -27,7 +27,13 @@
 }
 @media (max-height: 620px) { #comboPopup { top: 102px; font-size: 16px; } }
 #leaderboard table { table-layout: fixed; overflow-wrap: anywhere; }
-#leaderboard th:first-child { width: 13%; }
+#leaderboard th:first-child { width: 42px; }
+#leaderboard th:first-child, #leaderboard td:first-child {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  padding-inline: 4px;
+}
 #leaderboard th:nth-child(2) { width: 38%; }
 #leaderboard th:nth-child(3) { width: 22%; }
 #leaderboard th, #leaderboard td { padding-inline: 4px; }
@@ -84,7 +90,7 @@
 #tools button { min-height:44px; min-width:44px; }
 #home:focus-within { outline:none; }
 @media(prefers-reduced-motion:reduce) { #target { transition:none; } }
-</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">YOUR SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><div id="bossImpact" aria-hidden="true"></div><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
+</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button><button id="homeSound" class="secondary" aria-label="Play music">♪ Play music</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">YOUR SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><div id="bossImpact" aria-hidden="true"></div><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
 <div id="bossIntro" class="hidden" role="status"><strong>A WILD NISA HAS APPEARED!</strong><span id="bossCommand" class="hidden">QUICK SMACK HER!</span></div><div id="comboMeter" class="hidden">Hits in a row build a combo</div><div id="comboPopup" class="hidden" role="status"></div>
 <div id="bossLine" class="hidden">“To the basement! To the basement!”</div>
 </section><section id="cinema" class="hidden"><img id="scene" alt="Story scene"><div id="cinemaLabel"></div></section><section id="roundResult" class="hidden" aria-live="polite">
@@ -217,8 +223,8 @@ function prepareAudio() {
         track.gain.connect(context.destination);
       }).catch(() => { track.failed = true; });
     }
-    if (audioContext.state !== 'running' && !resumeRequest) {
-      resumeRequest = audioContext.resume().then(syncMusic).catch(() => {}).finally(() => { resumeRequest = undefined; });
+    if (audioContext.state !== 'running' && (!resumeRequest || window.navigator?.userActivation?.isActive)) {
+      resumeRequest = audioContext.resume().then(() => { syncMusic(); updateHomeSound(); }).catch(() => {}).finally(() => { resumeRequest = undefined; });
     }
   } catch {
     audioFailed = true;
@@ -284,8 +290,34 @@ function sound() {
   }
 }
 
+function updateHomeSound() {
+  const playing = audioOn && audioContext?.state === 'running';
+  $('homeSound').textContent = playing ? '♪ Music on' : '♪ Play music';
+  $('homeSound').setAttribute('aria-label', playing ? 'Mute music' : 'Play music');
+  $('homeSound').setAttribute('aria-pressed', String(Boolean(playing)));
+}
+
+$('homeSound').onclick = () => {
+  if (audioOn && audioContext?.state === 'running') {
+    audioOn = false;
+    stopTapSounds();
+  } else {
+    audioOn = true;
+    prepareAudio();
+  }
+  syncMusic();
+  updateHomeSound();
+  $('sound').textContent = audioOn ? '🔊' : '🔇';
+};
+const unlockLandingMusic = event => {
+  if (event.target.closest?.('#homeSound')) return;
+  if (audioOn) prepareAudio();
+};
+document.addEventListener('pointerdown', unlockLandingMusic, { passive: true });
+document.addEventListener('keydown', unlockLandingMusic);
+
 function syncMusic() {
-  const wanted = audioOn && !paused && phase !== 'menu' && phase !== 'end';
+  const wanted = audioOn && !paused && phase !== 'end';
   const context = audioContext;
   const track = phase === 'defeat' ? sadMusicTrack : ['boss-intro', 'boss'].includes(phase) ? bossMusicTrack : musicTrack;
   if (!context) return;
@@ -670,4 +702,6 @@ $('target').addEventListener('click', event => {
 });
 $('target').addEventListener('keydown', event => {
   if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
-});$('play').onclick=start;$('again').onclick=start;$('how').onclick=()=>show('help',true);$('closeHelp').onclick=()=>show('help',false);$('sound').onclick=()=>{audioOn=!audioOn;if(audioOn)prepareAudio();else stopTapSounds();syncMusic();$('sound').textContent=audioOn?'🔊':'🔇'};$('pause').onclick=pause;$('resume').onclick=pause;document.addEventListener('visibilitychange',()=>{if(document.hidden&&!paused&&['tabby','boss-intro','boss','paw','defeat','return','round-result'].includes(phase))pause()});for(const src of [...tabbies,...friends,asset('boss'),...Object.values(scenes),asset('landing')]){const im=new Image();im.src=src}window.__smackQA=()=>({phase,score,remaining,pawHits,friendCount,awaitingFriend});})();</script></body></html>
+});$('play').onclick=start;$('again').onclick=start;$('how').onclick=()=>show('help',true);$('closeHelp').onclick=()=>show('help',false);$('sound').onclick=()=>{audioOn=!audioOn;if(audioOn)prepareAudio();else stopTapSounds();syncMusic();$('sound').textContent=audioOn?'🔊':'🔇'};$('pause').onclick=pause;$('resume').onclick=pause;document.addEventListener('visibilitychange',()=>{if(document.hidden&&!paused&&['tabby','boss-intro','boss','paw','defeat','return','round-result'].includes(phase))pause()});for(const src of [...tabbies,...friends,asset('boss'),...Object.values(scenes),asset('landing')]){const im=new Image();im.src=src}window.__smackQA=()=>({phase,score,remaining,pawHits,friendCount,awaitingFriend});
+prepareAudio();
+updateHomeSound();})();</script></body></html>
