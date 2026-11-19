@@ -8,7 +8,7 @@ The boss introduction precedes the full five-second timer. Boss hits shake Nisa 
 
 Hosted assets are resized copies. The full-resolution source images remain in the repository's original asset files. Run npm ci and node build.mjs to create dist. The hosted game is about 8 MB. The build serves assets as separate files.
 
-The one-point leaderboard uses leaderboard-hits-v2.json. Previous multiplier standings remain in leaderboard-v1.json. Existing sessions from earlier releases remain compatible. The server validates score and phase timestamps and uses optimistic concurrency and retries when writing. This is a casual leaderboard and browser-generated inputs are not proof of human play.
+The public one-point season uses leaderboard-hits-v3.json. The tested QA standings remain in leaderboard-hits-v2.json. Previous multiplier standings remain in leaderboard-v1.json. Existing sessions from earlier releases remain compatible. The server validates score and phase timestamps and uses optimistic concurrency and retries when writing. This is a casual leaderboard and browser-generated inputs are not proof of human play.
 
 ## QA performed
 

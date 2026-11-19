@@ -1,7 +1,7 @@
 import { get, put, BlobPreconditionFailedError, BlobServiceNotAvailable, BlobServiceRateLimited } from '@vercel/blob';
 import { issueTicket, verifyTicket, countTaps, runCanBePosted, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
 
-const currentPath = 'leaderboard-hits-v2.json';
+const currentPath = 'leaderboard-hits-v3.json';
 const MAX_REQUEST_BYTES = 12000;
 const json = (data, status = 200) => Response.json(data, {
   status,
