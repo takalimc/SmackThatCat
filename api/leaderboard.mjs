@@ -1,5 +1,5 @@
-import { get, put, BlobPreconditionFailedError } from '@vercel/blob';
-import { issueTicket, verifyTicket, countTaps, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
+import { get, put, BlobPreconditionFailedError, BlobServiceNotAvailable, BlobServiceRateLimited } from '@vercel/blob';
+import { issueTicket, verifyTicket, countTaps, runCanBePosted, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
 
 const pathname = 'leaderboard-v1.json';
 const MAX_REQUEST_BYTES = 12000;
@@ -37,12 +37,16 @@ async function readInput(request) {
 }
 
 async function saveScore(run, score, name) {
-  for (let attempt = 0; attempt < 5; attempt++) {
-    const { state, etag } = await readBoard();
-    const next = publishEntry(state, run, score, Date.now(), name);
-    if (next === null) return json({ error: 'The leaderboard is busy. Try again shortly.' }, 503);
-    if (next === state) return json({ ranks: publicRanks(state), entryId: run.id });
+  for (let attempt = 0; attempt < 6; attempt++) {
+    let etag;
+    let writing = false;
     try {
+      const current = await readBoard();
+      etag = current.etag;
+      const next = publishEntry(current.state, run, score, Date.now(), name);
+      if (next === null) return json({ error: 'The leaderboard is busy. Try again shortly.' }, 503);
+      if (next === current.state) return json({ ranks: publicRanks(current.state), entryId: run.id });
+      writing = true;
       await put(pathname, JSON.stringify(next), {
         access: 'private',
         contentType: 'application/json',
@@ -50,10 +54,13 @@ async function saveScore(run, score, name) {
       });
       return json({ ranks: publicRanks(next), entryId: run.id });
     } catch (error) {
-      const creationRace = !etag && /already exists/i.test(error.message);
-      if (!(error instanceof BlobPreconditionFailedError) && !creationRace) throw error;
+      const creationRace = writing && !etag && /already exists/i.test(error.message);
+      if (!creationRace && !(error instanceof BlobPreconditionFailedError ||
+          error instanceof BlobServiceNotAvailable || error instanceof BlobServiceRateLimited)) throw error;
+      if (attempt < 5) await new Promise(resolve => setTimeout(resolve, 80 * (attempt + 1) + Math.random() * 70));
     }
   }
+  console.warn('Leaderboard write retries exhausted');
   return json({ error: 'The leaderboard is busy. Try again shortly.' }, 503);
 }
 
@@ -69,16 +76,19 @@ export default {
       const key = process.env.LEADERBOARD_SIGNING_KEY;
       if (!key) throw Error('Missing leaderboard signing key');
       if (input.action === 'start') {
-        const rules = input.rules === 'combo-v1' ? 'combo-v1' : 'classic';
+        const rules = ['combo-v1', 'combo-six-finish'].includes(input.rules) ? input.rules : 'classic';
         return json({ ticket: issueTicket(key, Date.now(), rules) });
       }
       const run = verifyTicket(input.ticket, key);
       const score = run && countTaps(input.taps, run.rules);
-      if (!run || !score) return json({ error: 'This run could not be verified for the leaderboard.' }, 422);
+      if (!run || !score || !runCanBePosted(run, input.taps)) {
+        return json({ error: 'This run could not be verified for the leaderboard.' }, 422);
+      }
       const name = parsePlayerName(input.name);
       if (name === null) return json({ error: 'Use up to 20 letters, numbers, spaces, or common name punctuation.' }, 422);
       return await saveScore(run, score, name);
-    } catch {
+    } catch (error) {
+      console.error('Leaderboard request failed', error?.constructor?.name ?? 'UnknownError');
       return json({ error: 'The online leaderboard is unavailable. Try again shortly.' }, 503);
     }
   }
