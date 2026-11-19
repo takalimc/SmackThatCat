@@ -1,9 +1,9 @@
-# Smack That Cat! v0.6.8
+# Smack That Cat! v0.6.9
 
-The end-screen leaderboard shows the ten highest shared scores. Players can choose **Post my score** after a run with points. Posts appear under a generated label and require no account. Previous device scores remain in browser storage and do not appear on the public board.
+The opening mode is SMACK THAT CAT! Quick hits within 0.60 seconds build a combo. Hits earn 2× points from the third consecutive hit and 3× from the sixth. Boss Cat Nisa speaks at the start of her round and reacts to the first hit. The phases use short transitions and additional meows. After collecting six Paw-sy friends, the player can keep tapping for points until the original 10-second timer expires.
 
-A Vercel Function issues a time-limited signed session at the start of play. It validates timing and derives the score and friend count from the ordered tap times. This is a casual leaderboard. A player controls their browser, so this validation does not prove that the inputs came from a human. The private leaderboard store keeps top scores and briefly retains session IDs to prevent duplicates. It does not keep the individual tap times.
+At the end of a round, a short score reveal compares the result to the posted high score when the board is available. Then, players can post their score under their own public nickname or a generated label. The shared top ten also shows Nisa hits and the active time to collect all six Paw-sy friends. Existing scores are retained. A dash indicates an unavailable statistic or a run that did not collect all six.
 
-Run npm install and then node build.mjs to build the same standalone game into dist/index.html and verify it against release.sha256. The build embeds the 16 original PNGs and two WAVs. The original v0.6.5 checksum remains in baseline.sha256.
+The online leaderboard derives scoring and stats from submitted tap times and a time-limited session. It does not retain the individual tap times. This is a casual leaderboard and browser input is not proof of human play.
 
-The online leaderboard needs a linked private Vercel Blob store and the server-only LEADERBOARD_SIGNING_KEY environment variable. The standalone file remains playable offline.
+Run npm ci and node build.mjs to build dist/index.html. The game embeds the original 16 PNGs and two WAVs, plus two Boss Cat speech clips. Boss Cat speech was generated locally with the [Kokoro-82M model](https://huggingface.co/hexgrad/Kokoro-82M) using its af_bella voice. The standalone works offline. Online standings require the linked private Vercel Blob store and the server-only LEADERBOARD_SIGNING_KEY.

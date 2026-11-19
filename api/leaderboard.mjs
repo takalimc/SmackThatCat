@@ -1,5 +1,5 @@
 import { get, put, BlobPreconditionFailedError } from '@vercel/blob';
-import { issueTicket, verifyTicket, countTaps, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
+import { issueTicket, verifyTicket, countTaps, parsePlayerName, publishEntry, publicRanks } from '../lib/leaderboard.mjs';
 
 const pathname = 'leaderboard-v1.json';
 const MAX_REQUEST_BYTES = 12000;
@@ -36,10 +36,10 @@ async function readInput(request) {
   } catch {}
 }
 
-async function saveScore(run, score) {
+async function saveScore(run, score, name) {
   for (let attempt = 0; attempt < 5; attempt++) {
     const { state, etag } = await readBoard();
-    const next = publishEntry(state, run, score);
+    const next = publishEntry(state, run, score, Date.now(), name);
     if (next === null) return json({ error: 'The leaderboard is busy. Try again shortly.' }, 503);
     if (next === state) return json({ ranks: publicRanks(state), entryId: run.id });
     try {
@@ -68,11 +68,16 @@ export default {
       if (!input || typeof input !== 'object') return json({ error: 'Invalid request.' }, 400);
       const key = process.env.LEADERBOARD_SIGNING_KEY;
       if (!key) throw Error('Missing leaderboard signing key');
-      if (input.action === 'start') return json({ ticket: issueTicket(key) });
+      if (input.action === 'start') {
+        const rules = input.rules === 'combo-v1' ? 'combo-v1' : 'classic';
+        return json({ ticket: issueTicket(key, Date.now(), rules) });
+      }
       const run = verifyTicket(input.ticket, key);
-      const score = countTaps(input.taps);
+      const score = run && countTaps(input.taps, run.rules);
       if (!run || !score) return json({ error: 'This run could not be verified for the leaderboard.' }, 422);
-      return await saveScore(run, score);
+      const name = parsePlayerName(input.name);
+      if (name === null) return json({ error: 'Use up to 20 letters, numbers, spaces, or common name punctuation.' }, 422);
+      return await saveScore(run, score, name);
     } catch {
       return json({ error: 'The online leaderboard is unavailable. Try again shortly.' }, 503);
     }

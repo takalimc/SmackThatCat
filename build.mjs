@@ -6,15 +6,18 @@ import { fileURLToPath } from 'node:url';
 
 const root = dirname(fileURLToPath(import.meta.url));
 let html = await readFile(resolve(root, 'index.template.html'), 'utf8');
-const references = new Set(html.match(/assets\/[\w]+\.(?:png|wav)/g));
-assert.equal(references.size, 18);
+const references = new Set(html.match(/assets\/[\w-]+\.(?:png|wav)/g));
+assert.equal(references.size, 20);
 for (const path of references) {
-  const asset = await readFile(resolve(root, 'original-' + path.split('/')[1]));
+  const asset = await readFile(resolve(root, ['assets/boss-voice.wav', 'assets/boss-ow.wav'].includes(path) ? path.split('/')[1] : 'original-' + path.split('/')[1]));
   const mime = path.endsWith('.png') ? 'image/png' : 'audio/wav';
   html = html.replaceAll(path, 'data:' + mime + ';base64,' + asset.toString('base64'));
 }
+const comboRules = await readFile(resolve(root, 'lib/combo.mjs'), 'utf8');
+assert.ok(html.includes('/* COMBO_RULES */'));
+html = html.replace('/* COMBO_RULES */', () => comboRules.replace(/^export /gm, ''));
 const expected = (await readFile(resolve(root, 'release.sha256'), 'utf8')).trim();
-assert.equal(createHash('sha256').update(html).digest('hex'), expected, 'The build differs from the verified v0.6.8 release.');
+assert.equal(createHash('sha256').update(html).digest('hex'), expected, 'The build differs from the verified v0.6.9 release.');
 const output = resolve(root, 'dist/index.html');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);

@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.8</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Smack That Cat! v0.6.9</title><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#261522;font-family:system-ui,-apple-system,sans-serif;color:white}button{cursor:pointer;font:inherit;touch-action:manipulation}#app{position:relative;max-width:650px;height:100dvh;margin:auto;overflow:hidden;background:radial-gradient(circle,#fff5da,#f7bcb3)}.hidden{display:none!important}#home,#game,#cinema,#end,#help,#paused{position:absolute;inset:0}#home{background:#35221e}#poster{width:100%;height:100%;object-fit:cover}#home:after{content:"";position:absolute;inset:65% 0 0;background:linear-gradient(transparent,#24111ad9);pointer-events:none}#menu{position:absolute;bottom:max(5%,env(safe-area-inset-bottom));left:0;right:0;z-index:2;display:grid;justify-items:center;gap:12px}.primary{border:4px solid #fff3d8;border-radius:50px;background:linear-gradient(#ff7286,#e72452);color:white;font-size:27px;font-weight:1000;padding:12px 58px;box-shadow:0 6px #92203c}.secondary{border:2px solid #a34a5a;border-radius:40px;background:#fff3dd;color:#692d43;font-weight:800;padding:10px 25px}#hud{position:absolute;z-index:5;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:5px}.pill{min-width:73px;text-align:center;border-radius:13px;border:2px solid #ffdb95;background:#6b3041;padding:5px 8px;font-size:11px;font-weight:900}.pill strong{display:block;font-size:25px;color:#ffe57a}#tools{display:flex;gap:5px}#tools button{border:2px solid #fff6;border-radius:10px;background:#fff3df;color:#763145;height:43px;min-width:39px}#phase{position:absolute;top:85px;left:6px;right:6px;text-align:center;color:#922b50;font-size:clamp(18px,5vw,26px);font-weight:1000}#arena{position:absolute;inset:145px 8px 105px;overflow:hidden;touch-action:none}#target{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(120px,39vw,240px);height:clamp(120px,39vw,240px);border:0;background:none;padding:0;touch-action:none;transition:left .13s ease-out,top .13s ease-out}#target img{width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}#target.boss{width:min(65%,260px);height:min(80%,380px)}#target.hit img{animation:boop .16s ease}@keyframes boop{50%{transform:scale(.89) rotate(-5deg)}}#bubble{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(17px,4.2vw,23px);color:#e92859;font-weight:1000;text-shadow:1px 2px white;pointer-events:none}#progress{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:4px;right:4px;text-align:center;color:#782c43;font-weight:900;font-size:13px}#slots{display:flex;justify-content:center;gap:5px;margin-top:7px}.slot{width:clamp(37px,11vw,54px);height:clamp(37px,11vw,54px);border:2px solid #ce8793;border-radius:10px;background:#fff9}.slot img{width:100%;height:100%;object-fit:contain}#cinema{z-index:12;background:#21151e;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}#cinema img{width:100%;height:calc(100% - 96px);min-height:0;object-fit:contain;flex:1}#cinemaLabel{position:relative;flex:none;min-height:90px;padding:12px 16px;display:grid;place-items:center;text-align:center;font-weight:1000;font-size:clamp(18px,4.8vw,29px);line-height:1.12;color:#ffe46c;text-shadow:2px 3px #842441;background:#21151e}#end,#help,#paused{z-index:20;background:#271524e9;display:grid;place-items:center;padding:18px}.panel{background:#fff1d9;border:4px solid #f6bb61;border-radius:23px;color:#702d43;padding:23px;max-width:440px;width:100%;text-align:center}.panel h1{margin:0 0 10px}#finalScore{font-size:58px;font-weight:1000;color:#e83259}#notice{position:absolute;z-index:8;top:23%;left:10%;right:10%;text-align:center;font-weight:1000;font-size:clamp(22px,5vw,32px);color:#ef3b64;text-shadow:2px 2px white;pointer-events:none}#notice.bossNotice{top:112px;font-size:19px}#toast{font-size:14px;min-height:20px}@media(max-height:620px){#arena{inset:125px 8px 75px}#phase{top:75px}#target.boss{height:75%}#progress{font-size:11px}}@media(min-aspect-ratio:1/1){#poster{object-fit:contain}#arena{inset:120px 8px 65px}#target{width:clamp(110px,28vh,230px);height:clamp(110px,28vh,230px)}#target.boss{height:85%}}
 
 /* Use the game’s own hit feedback and keep touch gestures out of the arena. */
@@ -10,16 +10,23 @@
   #target { transition: none; }
 }
 
-#notice.pawsyComplete {
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 12px;
-  border-radius: 16px;
-  background: #fff3dd;
-  color: #922b50;
-  text-shadow: none;
+#comboMeter, #bossLine {
+  position: absolute;
+  inset: auto 8px max(14px, env(safe-area-inset-bottom));
+  text-align: center;
+  color: #782c43;
+  font-size: clamp(14px, 3.8vw, 19px);
+  font-weight: 900;
 }
-
+#comboMeter strong { color: #a52c52; }
+#leaderboard table { table-layout: fixed; overflow-wrap: anywhere; }
+#leaderboard th:first-child { width: 13%; }
+#leaderboard th:nth-child(2) { width: 30%; }
+#leaderboard th:nth-child(3), #leaderboard th:nth-child(4) { width: 16%; }
+#leaderboard th, #leaderboard td { padding-inline: 4px; }
+#postForm { margin: 10px 0; }
+#postForm label { display: block; font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+#postForm input { box-sizing: border-box; width: min(100%, 220px); border: 1px solid #a34a5a; border-radius: 9px; padding: 7px 9px; font: inherit; font-size: 16px; background: #fffdf7; color: #692d43; }
 #end { align-items: safe center; overflow-y: auto; }
 #leaderboard { margin: 22px auto 0; max-width: 320px; }
 #leaderboard h2 { margin: 0 0 4px; font-size: 19px; }
@@ -32,32 +39,61 @@
 #leaderboard #leaderboardStatus { margin-top: 8px; }
 #leaderboard tr.currentRun { background: #f9d98f; font-weight: 800; }
 #end #again { max-width: 100%; padding-inline: clamp(12px, 8vw, 45px); }
-</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">TABBY RUSH</div><div id="notice"></div><div id="arena"><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div></section><section id="cinema" class="hidden"><img id="scene" alt="Story scene"><div id="cinemaLabel"></div></section><section id="end" class="hidden"><div class="panel"><h1>MEOW-FEST!</h1><div id="finalScore">0</div><p id="summary"></p><button id="again" class="primary">PLAY AGAIN</button>
+
+#roundResult {
+  position: absolute;
+  inset: 0;
+  z-index: 16;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: #271524f5;
+  text-align: center;
+}
+#roundResult .panel { padding: 21px; }
+#roundResultText { color: #922b50; font-size: clamp(24px, 7vw, 38px); }
+#roundResultPoints { margin: 0; font-weight: 900; }
+</style></head><body><main id="app"><section id="home"><img id="poster" src="assets/landing.png" alt="Chaotic cat kitchen"><div id="menu"><button id="play" class="primary">PLAY!</button><button id="how" class="secondary">HOW TO PLAY</button></div></section><section id="game" class="hidden"><div id="hud"><div class="pill">SCORE<strong id="score">0</strong></div><div class="pill">TIME<strong id="time">15</strong></div><div id="tools"><button id="sound" aria-label="Toggle sound">🔊</button><button id="pause" aria-label="Pause">Ⅱ</button></div></div><div id="phase">SMACK THAT CAT!</div><div id="notice"></div><div id="arena"><button id="target" aria-label="Tap cat"><img id="cat" alt="Cat"><span id="bubble"></span></button></div><div id="progress"><span id="progressText">PAW-SY COLLECTED 0/6</span><div id="slots"></div></div>
+<div id="comboMeter" class="hidden">Quick taps build a combo</div>
+<div id="bossLine" class="hidden">“To the basement! To the basement!” <span id="bossOw" class="hidden">“Ow! Ow! Ow!”</span></div>
+</section><section id="cinema" class="hidden"><img id="scene" alt="Story scene"><div id="cinemaLabel"></div></section><section id="roundResult" class="hidden" aria-live="polite">
+  <div class="panel">
+    <h1 id="roundResultText">Round complete!</h1>
+    <p id="roundResultPoints"></p>
+  </div>
+</section><section id="end" class="hidden"><div class="panel"><h1>MEOW-FEST!</h1><div id="finalScore">0</div><p id="summary"></p><button id="again" class="primary">PLAY AGAIN</button>
 <section id="leaderboard" aria-labelledby="leaderboardHeading">
   <h2 id="leaderboardHeading">Leaderboard</h2>
   <p>Top scores from all players</p>
-  <button id="postScore" class="secondary hidden">Post my score</button>
+  <form id="postForm" class="hidden">
+    <label for="playerName">Public nickname (optional)</label>
+    <input id="playerName" name="playerName" type="text" maxlength="20" placeholder="Player name" autocomplete="off">
+    <button id="postScore" type="submit" class="secondary">Post my score</button>
+  </form>
   <table aria-label="Online high scores">
-    <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Score</th><th scope="col">Paw-sy</th></tr></thead>
+    <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Score</th><th scope="col">Nisa hits</th><th scope="col">Six Paw-sy time</th></tr></thead>
     <tbody id="ranks"></tbody>
   </table>
   <p id="leaderboardStatus" role="status"></p>
-</section></div></section><section id="help" class="hidden"><div class="panel"><h1>HOW TO PLAY</h1><p>Tap the mischievous tabby for 15 seconds. Smack Boss Cat Nisa for 5 seconds. Then collect all six Paw-sy friends in 10 seconds: tap two tabbies, then tap the Paw-sy friend to collect it. Repeat!</p><button id="closeHelp" class="secondary">GOT IT!</button></div></section><section id="paused" class="hidden"><div class="panel"><h1>PAUSED</h1><button id="resume" class="primary">RESUME</button></div></section></main><script>(()=>{'use strict';const $=id=>document.getElementById(id);const ASSETS={"tabby0":"assets/tabby0.png","tabby5":"assets/tabby5.png","cloud":"assets/cloud.png","tiger":"assets/tiger.png","mango":"assets/mango.png","shadow":"assets/shadow.png","snowball":"assets/snowball.png","oreo":"assets/oreo.png","tabby1":"assets/tabby1.png","return":"assets/return.png","tabby3":"assets/tabby3.png","boss":"assets/boss.png","defeat":"assets/defeat.png","tabby2":"assets/tabby2.png","tabby4":"assets/tabby4.png","landing":"assets/landing.png"};const asset=n=>ASSETS[n];const tabbies=Array.from({length:6},(_,i)=>asset('tabby'+i));const friends=['snowball','shadow','oreo','mango','tiger','cloud'].map(asset);const scenes={defeat:asset('defeat'),return:asset('return')};let phase='menu',score=0,remaining=15,deadline=0,paused=false,raf=0,sceneTimeout=0,sceneRemaining=0,sceneStarted=0,pawHits=0,friendCount=0,awaitingFriend=false,tabbyIndex=0,audioOn=true,token=0;const AUDIO={"meow":"assets/meow.wav","smack":"assets/smack.wav"};
+</section></div></section><section id="help" class="hidden"><div class="panel"><h1>HOW TO PLAY</h1><p>Tap tabbies quickly to build a combo. Smack Boss Cat Nisa as often as you can. In Paw-sy, tap two tabbies and then a friend. Keep tapping for points after all six friends are collected.</p><button id="closeHelp" class="secondary">GOT IT!</button></div></section><section id="paused" class="hidden"><div class="panel"><h1>PAUSED</h1><button id="resume" class="primary">RESUME</button></div></section></main><script>(()=>{'use strict';const $=id=>document.getElementById(id);const ASSETS={"tabby0":"assets/tabby0.png","tabby5":"assets/tabby5.png","cloud":"assets/cloud.png","tiger":"assets/tiger.png","mango":"assets/mango.png","shadow":"assets/shadow.png","snowball":"assets/snowball.png","oreo":"assets/oreo.png","tabby1":"assets/tabby1.png","return":"assets/return.png","tabby3":"assets/tabby3.png","boss":"assets/boss.png","defeat":"assets/defeat.png","tabby2":"assets/tabby2.png","tabby4":"assets/tabby4.png","landing":"assets/landing.png"};const asset=n=>ASSETS[n];const tabbies=Array.from({length:6},(_,i)=>asset('tabby'+i));const friends=['snowball','shadow','oreo','mango','tiger','cloud'].map(asset);const scenes={defeat:asset('defeat'),return:asset('return')};let phase='menu',score=0,remaining=15,deadline=0,paused=false,raf=0,sceneTimeout=0,sceneRemaining=0,sceneStarted=0,pawHits=0,friendCount=0,awaitingFriend=false,tabbyIndex=0,audioOn=true,token=0;const AUDIO={"meow":"assets/meow.wav","smack":"assets/smack.wav","bossVoice":"assets/boss-voice.wav","bossOw":"assets/boss-ow.wav"};
 const show = (id, on) => $(id).classList.toggle('hidden', !on);
-const tapTracks = [
-  { name: 'smack', volume: .6, voices: [] },
-  { name: 'meow', volume: .38, voices: [] }
-];
+const smackTrack = { name: 'smack', volume: .6, voices: [] };
+const meowTrack = { name: 'meow', volume: .38, voices: [] };
+const bossVoiceTrack = { name: 'bossVoice', volume: .84, voices: [] };
+const bossOwTrack = { name: 'bossOw', volume: .84, voices: [] };
+const tapTracks = [smackTrack, meowTrack];
+const audioTracks = [...tapTracks, bossVoiceTrack, bossOwTrack];
 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 let audioContext;
-let audioReady = false;
 let audioFailed = false;
 let resumeRequest;
 let hitAnimation;
 const cueVoices = new Set();
-const celebrationDuration = 1000;
-let celebrationUntil = 0;
-let pausedAt = 0;
+let tabbyStreak = 0;
+let pawCompleteTime = null;
+let bossReacted = false;
+
+/* COMBO_RULES */
 
 // Each cue is a set of notes with a pitch and a start time in seconds.
 const cues = {
@@ -68,7 +104,8 @@ const cues = {
   paw: [[523.25, 0], [659.25, .09], [783.99, .18]],
   collect: [[659.25, 0], [987.77, .07]],
   allSix: [[523.25, 0], [659.25, .12], [783.99, .24], [1046.5, .39]],
-  finish: [[523.25, 0], [392, .14]]
+  finish: [[523.25, 0], [392, .14]],
+  highScore: [[659.25, 0], [783.99, .12], [1046.5, .24]]
 };
 
 function playCue(name) {
@@ -85,7 +122,7 @@ function playCue(name) {
         const note = context.createOscillator();
         const envelope = context.createGain();
         const at = start + offset;
-        note.type = 'sine';
+        note.type = name === 'boss' ? 'triangle' : 'sine';
         note.frequency.value = pitch;
         envelope.gain.setValueAtTime(0, at);
         envelope.gain.linearRampToValueAtTime(.105, at + .012);
@@ -118,13 +155,13 @@ function prepareAudio() {
     if (!audioContext) {
       audioContext = new AudioContextClass({ latencyHint: 'interactive' });
       const context = audioContext;
-      Promise.all(tapTracks.map(async track => {
+      for (const track of audioTracks) Promise.resolve().then(async () => {
         const bytes = await (await fetch(AUDIO[track.name])).arrayBuffer();
         track.buffer = await context.decodeAudioData(bytes);
         track.gain = context.createGain();
         track.gain.gain.value = track.volume;
         track.gain.connect(context.destination);
-      })).then(() => { audioReady = true; }).catch(() => { audioFailed = true; });
+      }).catch(() => { track.failed = true; });
     }
     if (audioContext.state !== 'running' && !resumeRequest) {
       resumeRequest = audioContext.resume().catch(() => {}).finally(() => { resumeRequest = undefined; });
@@ -136,38 +173,56 @@ function prepareAudio() {
 
 function stopTapSounds() {
   stopCues();
-  for (const track of tapTracks) {
+  for (const track of audioTracks) {
     track.voices.splice(0).forEach(voice => voice.stop());
     if (track.player) track.player.pause();
   }
 }
 
+function playTrack(track, rate = 1, delay = 0) {
+  if (!audioOn || paused) return;
+  try {
+    if (audioFailed || track.failed || !AudioContextClass) {
+      track.player ??= new Audio(AUDIO[track.name]);
+      track.player.volume = track.volume;
+      track.player.playbackRate = rate;
+      track.player.currentTime = 0;
+      track.player.play().catch(() => {});
+      return;
+    }
+    if (!track.buffer || audioContext.state !== 'running') return;
+    const voice = audioContext.createBufferSource();
+    voice.buffer = track.buffer;
+    voice.playbackRate.value = rate;
+    voice.connect(track.gain);
+    voice.onended = () => {
+      voice.disconnect();
+      const index = track.voices.indexOf(voice);
+      if (index !== -1) track.voices.splice(index, 1);
+    };
+    if (track.voices.length >= 4) track.voices.shift().stop();
+    const start = audioContext.currentTime + delay;
+    track.endsAt = start + track.buffer.duration / rate;
+    voice.start(start);
+    track.voices.push(voice);
+  } catch {}
+}
+
 function sound() {
   if (!audioOn) return;
   prepareAudio();
-  for (const track of tapTracks) {
-    try {
-      if (audioFailed || !AudioContextClass) {
-        track.player ??= new Audio(AUDIO[track.name]);
-        track.player.volume = track.volume;
-        track.player.currentTime = 0;
-        track.player.play().catch(() => {});
-        continue;
-      }
-      if (!audioReady || audioContext.state !== 'running') continue;
-      const voice = audioContext.createBufferSource();
-      voice.buffer = track.buffer;
-      voice.connect(track.gain);
-      voice.onended = () => {
-        voice.disconnect();
-        const index = track.voices.indexOf(voice);
-        if (index !== -1) track.voices.splice(index, 1);
-      };
-      if (track.voices.length >= 4) track.voices.shift().stop();
-      voice.start();
-      track.voices.push(voice);
-    } catch {}
+  playTrack(smackTrack);
+  if (phase !== 'boss' || !(bossVoiceTrack.voices.length || bossOwTrack.voices.length)) {
+    playTrack(meowTrack, .94 + Math.random() * .18);
   }
+}
+
+function animateTransition(element, isScene = false) {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  element.animate?.([
+    { opacity: .7, transform: isScene ? 'scale(.98)' : 'translateY(5px) scale(.95)' },
+    { opacity: 1, transform: 'none' }
+  ], { duration: isScene ? 380 : 340, easing: 'ease-out' });
 }
 
 function playHitAnimation() {
@@ -206,16 +261,20 @@ function startRankedRun() {
   rankedRun = {
     taps: { tabby: [], boss: [], paw: [] },
     ticket: /^https?:$/.test(location.protocol)
-      ? leaderboardRequest({ action: 'start' }).then(data => data.ticket).catch(() => null)
+      ? leaderboardRequest({ action: 'start', rules: 'combo-v1' }).then(data => data.ticket).catch(() => null)
       : Promise.resolve(null)
   };
+}
+
+function pawTimeLabel(milliseconds) {
+  return milliseconds == null ? '—' : (milliseconds / 1000).toFixed(2) + 's';
 }
 
 function showRanks(ranks, entryId) {
   const rows = ranks.map((entry, index) => {
     const row = document.createElement('tr');
     if (entry.id === entryId) row.classList.add('currentRun');
-    for (const value of [index + 1, entry.player, entry.score, entry.friends + '/6']) {
+    for (const value of [index + 1, entry.player, entry.score, entry.bossHits ?? '—', pawTimeLabel(entry.pawTime)]) {
       const cell = document.createElement('td');
       cell.textContent = value;
       row.appendChild(cell);
@@ -229,7 +288,7 @@ async function showLeaderboard() {
   const run = rankedRun;
   const status = $('leaderboardStatus');
   const post = $('postScore');
-  show('postScore', false);
+  show('postForm', false);
   post.disabled = false;
   showRanks([]);
   if (!/^https?:$/.test(location.protocol)) {
@@ -242,26 +301,27 @@ async function showLeaderboard() {
     .catch(() => ({ ranks: null }));
   const [board, ticket] = await Promise.all([readRanks, run.ticket]);
   if (rankedRun !== run || phase !== 'end') return;
-  show('postScore', Boolean(ticket && score > 0));
+  show('postForm', Boolean(ticket && score > 0));
   if (board.ranks) showRanks(board.ranks);
   status.textContent = !board.ranks ? 'Could not load online scores.' :
     score > 0 && !ticket ? 'Play another round while online to post a score.' :
     board.ranks.length ? '' : 'No scores posted yet.';
 }
 
-$('postScore').onclick = async () => {
+$('postForm').onsubmit = async event => {
+  event.preventDefault();
   const run = rankedRun;
   const status = $('leaderboardStatus');
   const post = $('postScore');
   post.disabled = true;
   status.textContent = 'Posting your score…';
   try {
-    const data = await leaderboardRequest({ ticket: await run.ticket, taps: run.taps });
+    const data = await leaderboardRequest({ ticket: await run.ticket, taps: run.taps, name: $('playerName').value });
     if (rankedRun !== run || phase !== 'end') return;
     const rank = data.ranks.findIndex(entry => entry.id === data.entryId) + 1;
     showRanks(data.ranks, data.entryId);
     status.textContent = rank ? 'Score posted at rank ' + rank + '.' : 'Score posted. This run is outside the top ten.';
-    show('postScore', false);
+    show('postForm', false);
   } catch (error) {
     if (rankedRun !== run || phase !== 'end') return;
     status.textContent = error.message === 'Failed to fetch' ? 'Could not post your score. Try again.' : error.message;
@@ -269,21 +329,102 @@ $('postScore').onclick = async () => {
   }
 };
 
-function image(src){$('cat').src=src}function move(center=false){const target=$('target');if(center||phase==='boss'){target.style.left='50%';target.style.top='50%';return}const arena=$('arena'),w=arena.clientWidth,h=arena.clientHeight,tw=target.offsetWidth,th=target.offsetHeight;const x=tw/2+Math.random()*Math.max(0,w-tw),y=th/2+Math.random()*Math.max(0,h-th);target.style.left=x+'px';target.style.top=y+'px'}function nextTabby(){tabbyIndex=(tabbyIndex+1)%6;image(tabbies[tabbyIndex]);move()}function reset(){stopTapSounds();celebrationUntil=0;pausedAt=0;clearTimeout(sceneTimeout);cancelAnimationFrame(raf);token++;score=0;pawHits=0;friendCount=0;awaitingFriend=false;tabbyIndex=0;paused=false;$('score').textContent='0';$('progressText').textContent='PAW-SY COLLECTED 0/6';$('slots').innerHTML=Array.from({length:6},()=>'<div class="slot"></div>').join('');$('bubble').textContent='';$('notice').textContent='';$('notice').className='';$('target').className='';$('target').setAttribute('aria-label','Tap cat');show('home',false);show('end',false);show('cinema',false);show('paused',false);show('game',true)}function begin(p,duration){phase=p;remaining=duration;deadline=performance.now()+duration*1000;$('phase').textContent=p==='tabby'?'TABBY RUSH':p==='boss'?'BOSS CAT':'PAW-SY COLLECTION';$('target').classList.toggle('boss',p==='boss');$('time').textContent=duration;$('bubble').textContent='';$('notice').textContent='';$('notice').className='';if(p==='boss'){image(asset('boss'));move(true)}else{awaitingFriend=false;image(tabbies[tabbyIndex]);move(true)}playCue(p);cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}function tick(now){if(paused)return;remaining=Math.max(0,(deadline-now)/1000);$('time').textContent=Math.ceil(remaining);if(remaining<=0){if(phase==='tabby')begin('boss',5);else if(phase==='boss')cinema('defeat');else if (phase === 'paw') {
-    if (now < celebrationUntil) raf = requestAnimationFrame(tick);
-    else finish();
+function image(src){$('cat').src=src}function move(center=false){const target=$('target');if(center||phase==='boss'){target.style.left='50%';target.style.top='50%';return}const arena=$('arena'),w=arena.clientWidth,h=arena.clientHeight,tw=target.offsetWidth,th=target.offsetHeight;const x=tw/2+Math.random()*Math.max(0,w-tw),y=th/2+Math.random()*Math.max(0,h-th);target.style.left=x+'px';target.style.top=y+'px'}function nextTabby(){$('target').setAttribute('aria-label','Tap cat');tabbyIndex=(tabbyIndex+1)%6;image(tabbies[tabbyIndex]);move()}function reset(){stopTapSounds();tabbyStreak=0;pawCompleteTime=null;clearTimeout(sceneTimeout);cancelAnimationFrame(raf);token++;score=0;pawHits=0;friendCount=0;awaitingFriend=false;tabbyIndex=0;paused=false;$('score').textContent='0';$('progressText').textContent='PAW-SY COLLECTED 0/6';$('slots').innerHTML=Array.from({length:6},()=>'<div class="slot"></div>').join('');$('bubble').textContent='';$('notice').textContent='';$('notice').className='';$('target').className='';$('target').setAttribute('aria-label','Tap cat');show('home',false);show('end',false);show('roundResult',false);show('cinema',false);show('paused',false);show('game',true)}function begin(p,duration){
+  phase=p;
+  show('progress', p === 'paw');
+  show('comboMeter', p === 'tabby');
+  show('bossLine', p === 'boss');
+  show('bossOw', false);
+  bossReacted = false;
+  $('comboMeter').textContent = 'Quick taps build a combo';
+  remaining=duration;deadline=performance.now()+duration*1000;$('phase').textContent=p==='tabby'?'SMACK THAT CAT!':p==='boss'?'BOSS CAT':'PAW-SY COLLECTION';$('target').classList.toggle('boss',p==='boss');$('time').textContent=duration;$('bubble').textContent='';$('notice').textContent='';$('notice').className='';if(p==='boss'){image(asset('boss'));move(true)}else{awaitingFriend=false;image(tabbies[tabbyIndex]);move(true)}
+  animateTransition($('phase'));
+  playCue(p);
+  if (p === 'boss') playTrack(bossVoiceTrack, 1, .31);
+  if (p === 'paw') playTrack(meowTrack, .86, .29);
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}function tick(now){if(paused)return;
+if (phase === 'tabby' && tabbyStreak) {
+  const lastTap = rankedRun.taps.tabby.at(-1);
+  const activeTime = rankedDurations.tabby - (deadline - now);
+  if (Math.floor(activeTime) - lastTap > COMBO_GAP_MS) {
+    tabbyStreak = 0;
+    $('comboMeter').textContent = 'Quick taps build a combo';
   }
+}
+remaining=Math.max(0,(deadline-now)/1000);
+$('time').textContent=Math.ceil(remaining);
+if (phase === 'paw' && remaining <= 3 && !rankedRun.scoreTarget && /^https?:$/.test(location.protocol)) {
+  const run = rankedRun;
+  run.scoreTarget = leaderboardRequest().then(data => { run.highest = data.ranks[0]?.score ?? 0; }).catch(() => {});
+}
+if(remaining<=0){if(phase==='tabby')begin('boss',5);else if(phase==='boss')cinema('defeat');else if (phase === 'paw') showRoundResult();
   return
 }
-raf=requestAnimationFrame(tick)}function cinema(which){cancelAnimationFrame(raf);phase=which;show('game',false);show('cinema',true);$('scene').src=scenes[which];$('cinemaLabel').textContent=which==='defeat'?'POOR NISA!':'OH NO! THE CAT HAS BROUGHT ITS PAW-SY!!';const t=++token;playCue(which);sceneTimeout=setTimeout(()=>{if(t!==token)return;if(which==='defeat')cinema('return');else{show('cinema',false);show('game',true);begin('paw',10)}},which==='defeat'?2100:2500)}function finish(){phase='end';if(friendCount<6)playCue('finish');cancelAnimationFrame(raf);show('game',false);show('end',true);$('finalScore').textContent=score;$('summary').textContent='Paw-sy collected: '+friendCount+'/6';showLeaderboard()}function hit(e) {
+raf=requestAnimationFrame(tick)}function cinema(which){cancelAnimationFrame(raf);phase=which;show('game',false);show('cinema',true);$('scene').src=scenes[which];$('cinemaLabel').textContent=which==='defeat'?'POOR NISA!':'OH NO! THE CAT HAS BROUGHT ITS PAW-SY!!';const t=++token;animateTransition($('scene'), true);playCue(which);sceneTimeout=setTimeout(()=>{if(t!==token)return;if(which==='defeat')cinema('return');else{show('cinema',false);show('game',true);begin('paw',10)}},which==='defeat'?2100:2500)}function showRoundResult() {
+  phase = 'round-result';
+  cancelAnimationFrame(raf);
+  show('game', false);
+  const title = $('roundResultText');
+  title.textContent = 'Round complete!';
+  $('roundResultPoints').textContent = score + (score === 1 ? ' point' : ' points');
+  show('roundResult', true);
+  const run = rankedRun;
+  const reveal = () => {
+    if (phase !== 'round-result' || rankedRun !== run) return;
+    if (Number.isFinite(run.highest) && score > run.highest) {
+      title.textContent = 'High Score!';
+      playCue('highScore');
+    } else if (Number.isFinite(run.highest) && run.highest > 0 && score === run.highest) {
+      title.textContent = 'Tied High Score!';
+      playCue('highScore');
+    } else {
+      if (Number.isFinite(run.highest) && score < run.highest) {
+        const difference = run.highest - score;
+        title.textContent = difference + (difference === 1 ? ' point' : ' points') + ' to the high score';
+      }
+      if (friendCount < 6) playCue('finish');
+    }
+  };
+  if (run.highest === undefined && run.scoreTarget) run.scoreTarget.then(reveal);
+  else reveal();
+  animateTransition(title);
+  sceneTimeout = setTimeout(finish, 1550);
+}
+
+function finish() {
+  phase = 'end';
+  show('roundResult', false);
+  show('end', true);
+  $('finalScore').textContent = score;
+  $('summary').textContent = 'Paw-sy collected: ' + friendCount + '/6' +
+    (pawCompleteTime == null ? '' : ' · All six in ' + pawTimeLabel(pawCompleteTime));
+  showLeaderboard();
+}
+
+function hit(e) {
   const now = performance.now();
   if (!e.isPrimary || e.button !== 0 || paused || $('target').classList.contains('hidden') ||
       !['tabby', 'boss', 'paw'].includes(phase) || now >= deadline) return;
   e.preventDefault();
-  score++;
+  const activeTime = Math.floor(rankedDurations[phase] - (deadline - now));
+  const taps = rankedRun.taps[phase];
+  let points = 1;
+  if (phase === 'tabby') {
+    tabbyStreak = nextStreak(tabbyStreak, activeTime - (taps.at(-1) ?? -Infinity));
+    points = comboMultiplier(tabbyStreak);
+    $('comboMeter').textContent = 'Combo ' + tabbyStreak + ' · ' + points + '× points';
+  }
+  taps.push(activeTime);
+  score += points;
   $('score').textContent = score;
-  const activeTime = rankedDurations[phase] - (deadline - now);
-  rankedRun.taps[phase].push(Math.floor(activeTime));
+  if (phase === 'boss' && !bossReacted) {
+    bossReacted = true;
+    show('bossOw', true);
+    const delay = bossVoiceTrack.voices.length
+      ? Math.max(0, bossVoiceTrack.endsAt - audioContext.currentTime + .06)
+      : 0;
+    playTrack(bossOwTrack, 1, delay);
+  }
   sound();
   playHitAnimation();
   if(phase==='boss'){$('bubble').textContent='';if(score%7===0){$('notice').textContent='WHAT THE FLUFF?!';$('notice').className='bossNotice';setTimeout(()=>{if(phase==='boss')$('notice').textContent=''},600)}}else if(phase==='paw'){
@@ -292,19 +433,20 @@ if(awaitingFriend){
  if(i<6){$('slots').children[i].innerHTML='<img src="'+friends[i]+'" alt="'+['Snowball','Shadow','Oreo','Mango','Tiger','Cloud'][i]+'">';friendCount++;$('progressText').textContent='PAW-SY COLLECTED '+friendCount+'/6';$('bubble').textContent='COLLECTED!';}
  awaitingFriend=false;pawHits=0;
  if (friendCount === 6) {
-   celebrationUntil = performance.now() + celebrationDuration;
-   $('notice').textContent = 'ALL SIX! CLAW-SOME!';
-   $('notice').className = 'pawsyComplete';
-   $('target').classList.add('hidden');
+   pawCompleteTime = activeTime;
+   $('progressText').textContent = 'PAW-SY COLLECTED 6/6 · KEEP TAPPING!';
    playCue('allSix');
+   playTrack(meowTrack, 1.24, .45);
  } else {
    playCue('collect');
-   nextTabby();
-   $('bubble').textContent = '';
  }
+ nextTabby();
+ $('bubble').textContent = '';
+}else if (friendCount === 6) {
+ nextTabby();
 }else{
  pawHits++;
- if(pawHits===2 && friendCount<6){awaitingFriend=true;image(friends[friendCount]);move(true);$('bubble').textContent='TAP TO COLLECT!';$('target').setAttribute('aria-label','Collect '+['Snowball','Shadow','Oreo','Mango','Tiger','Cloud'][friendCount]);}
+ if(pawHits===2){awaitingFriend=true;image(friends[friendCount]);move(true);playTrack(meowTrack,1.16,.09);$('bubble').textContent='TAP TO COLLECT!';$('target').setAttribute('aria-label','Collect '+['Snowball','Shadow','Oreo','Mango','Tiger','Cloud'][friendCount]);}
  else{nextTabby();$('bubble').textContent='';}
 }
 }else{nextTabby();if(score%9===0)$('bubble').textContent='PURR-FECT!';else $('bubble').textContent=''}}function start(){prepareAudio();reset();startRankedRun();begin('tabby',15)}function pause() {
@@ -312,7 +454,6 @@ if(awaitingFriend){
   const now = performance.now();
   if (!paused) {
     paused = true;
-    pausedAt = now;
     remaining = Math.max(0, (deadline - now) / 1000);
     stopTapSounds();
     cancelAnimationFrame(raf);
@@ -320,7 +461,6 @@ if(awaitingFriend){
   } else {
     paused = false;
     deadline = now + remaining * 1000;
-    if (celebrationUntil > pausedAt) celebrationUntil += now - pausedAt;
     show('paused', false);
     raf = requestAnimationFrame(tick);
   }
