@@ -1,6 +1,6 @@
-# Smack That Cat! v0.6.15
+# Smack That Cat! v0.6.16
 
-This is the approved v0.6.15 release.
+This is the approved v0.6.16 release.
 
 Each hit earns one point. Consecutive opening-round hits build a separate combo which ends on a miss or a gap longer than 0.6 seconds. Random supplied meows follow the smack with a short spacing rule so rapid tapping does not keep cancelling every meow.
 
@@ -26,3 +26,5 @@ The six supplied impact files are included as normalized 0.24-second gameplay ed
 Boss Cat has a separate pool of eight impact edits and five meows supplied by the project owner. The three-impact body-punch source has strikes near 0.18, 1.40, and 2.60 seconds. The gameplay edit keeps only the first strike. Each boss press scores one point and chooses one impact. Meows follow at a short spacing interval during rapid play to control overlap.
 
 Landing music attempts autoplay on page entry and resumes on the first interaction if browser autoplay rules block it. The landing page has a Play music / Music on control. The Rank column has a fixed width and cannot wrap. The boss entrance has its own 1.8-second duration before the full five-second play timer starts.
+
+Paw-sy instructions now follow each step of the two-tabby/friend sequence. Results give the nickname and score-posting action before replay. The high-score reveal lasts 2.2 seconds. Completed combos end with encouraging text.
