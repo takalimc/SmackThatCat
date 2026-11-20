@@ -10,7 +10,8 @@ const json = (data, status = 200) => Response.json(data, {
 const emptyBoard = () => ({ leaders: [], recent: [] });
 
 async function readBoard(pathname = currentPath) {
-  const result = await get(pathname, { access: 'private', useCache: false });
+  // Compression produces a weak HTTP ETag that cannot be used for conditional writes.
+  const result = await get(pathname, { access: 'private', useCache: false, headers: { 'Accept-Encoding': 'identity' } });
   if (!result) return { state: emptyBoard() };
   if (!result.stream) throw Error('Missing score data');
   return { state: await new Response(result.stream).json(), etag: result.blob.etag };
@@ -51,6 +52,7 @@ async function saveScore(run, score, name) {
       await put(pathname, JSON.stringify(next), {
         access: 'private',
         contentType: 'application/json',
+        addRandomSuffix: false,
         ...(etag ? { allowOverwrite: true, ifMatch: etag } : { allowOverwrite: false })
       });
       return json({ ...boardResponse(next), entryId: run.id });

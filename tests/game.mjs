@@ -9,7 +9,7 @@ assert.match(html, /#game, #arena, #target \{ touch-action: none; \}/);
 assert.match(html, /#target \{ -webkit-tap-highlight-color: transparent; \}/);
 assert.match(html, /@media \(any-pointer: coarse\) \{\s*#target \{ transition: none; \}/);
 
-function setup({ audio = true, highest = 100, transientFailure = false, storage = new Map(), day = '2026-11-19', blocked = false } = {}) {
+function setup({ audio = true, highest = 100, transientFailure = false, storage = new Map(), day = '2026-11-19', blocked = false, phone = false } = {}) {
   let now = 1000, id = 0;
   const frames = new Map(), timers = new Map(), elements = new Map();
   const notes = [];
@@ -32,7 +32,7 @@ function setup({ audio = true, highest = 100, transientFailure = false, storage 
         },
         children: Array.from({ length: 6 }, () => ({classList:{add(){}},animate(){}})), replaceChildren(...children) { this.children = children; },
         events: {}, addEventListener(event, callback) { this.events[event] = callback; }, setAttribute() {},
-        focus() {}, style: {setProperty(){}}, clientWidth: 360, clientHeight: 450, offsetWidth: 160, offsetHeight: 160,
+        focus() {}, style: {setProperty(k,v){this[k]=v;}}, clientWidth: 360, clientHeight: 450, offsetWidth: 160, offsetHeight: 160,
         animate() { counts.animated++; return { cancel() {} }; }
       });
     }
@@ -59,6 +59,8 @@ function setup({ audio = true, highest = 100, transientFailure = false, storage 
     }
   }
   const window = audio ? { AudioContext } : {};
+  window.events={}; window.addEventListener=(event,fn)=>{window.events[event]=fn;};
+  if(phone)Object.assign(window,{innerWidth:390,innerHeight:844,navigator:{maxTouchPoints:1},visualViewport:{height:844,addEventListener(){}},matchMedia:()=>({matches:false})});
   vm.runInNewContext(code, {
     document: {
       getElementById: get, addEventListener() {},
@@ -103,7 +105,7 @@ function setup({ audio = true, highest = 100, transientFailure = false, storage 
     if (paint) for (const [key, fn] of [...frames]) if (frames.delete(key)) fn(now);
   };
   const tap = (isPrimary = true, button = 0) => get('target').events.pointerdown({ isPrimary, button, preventDefault() {} });
-  return { get, counts, settle, step, tap, notes, clips, fades, submissions, storage, stoppedNotes: () => stoppedNotes, state: window.__smackQA };
+  return { window, get, counts, settle, step, tap, notes, clips, fades, submissions, storage, stoppedNotes: () => stoppedNotes, state: window.__smackQA };
 }
 
 
@@ -181,3 +183,21 @@ assert.equal(blocked.state().score,7);
 const corrupt=setup({storage:new Map([[key,'{broken']])});await round(corrupt);
 assert.equal(corrupt.state().score,7);
 console.log('PASS: saved personal best and album, partial collections, daily completion, one ribbon per day, replay/reload persistence, next-day reset, blocked/corrupt storage; ranked scores unchanged');
+
+const phone=setup({phone:true});phone.get('play').onclick();await phone.settle();phone.step(1000);
+const timeBefore=phone.get('time').textContent;
+phone.get('target').style.left='350px';phone.get('target').style.top='400px';
+phone.window.innerWidth=844;phone.window.innerHeight=390;phone.window.visualViewport.height=390;
+phone.window.events.resize();phone.step(0);phone.step(0);
+assert.equal(phone.get('rotateNotice').classList.contains('hidden'),false);
+assert.equal(phone.get('paused').classList.contains('hidden'),false);
+phone.step(5000);assert.equal(phone.get('time').textContent,timeBefore);
+phone.window.innerWidth=390;phone.window.innerHeight=844;phone.window.visualViewport.height=844;
+phone.window.events.resize();phone.step(0);phone.step(0);
+assert.equal(phone.get('rotateNotice').classList.contains('hidden'),true);
+assert.equal(phone.get('app').style['--playHeight'],'844px');
+assert.equal(phone.get('target').style.left,'50%');
+assert.equal(phone.get('paused').classList.contains('hidden'),false);
+phone.get('resume').onclick();phone.step(1000);
+assert.equal(Number(phone.get('time').textContent),Number(timeBefore)-1);
+console.log('PASS: phone rotation pauses the clock, portrait return restores full height and recenters target; resume preserves remaining time');

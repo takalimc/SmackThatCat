@@ -1,6 +1,6 @@
 {
   "name": "smack-that-cat",
-  "version": "0.6.20",
+  "version": "0.6.21",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -8,6 +8,6 @@
   },
   "scripts": {
     "build": "node build.mjs",
-    "test": "node tests/game.mjs && node tests/leaderboard.mjs"
+    "test": "node tests/game.mjs && node tests/leaderboard.mjs && node tests/api.mjs"
   }
 }
